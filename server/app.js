@@ -16,36 +16,14 @@ const Sample = require('./models/sample');
 // connect mongoose database 
 // mongoose.connect("mongodb://localhost:27017/TicketsDB" , {useNewUrlParser: true , useUnifiedTopology: true}); 
 
-// // schema 
-// const TicketSchema = new mongoose.Schema({
 
-//     title:{
-//         type: String , 
-//         required: true, 
-//     },
-//     description:{
-//         type: String, 
-//         required: true,
-//     },
-// }); 
-
-// create model 
-//const Ticket = mongoose.model("Ticket", TicketSchema); 
-
-//let ticket01 = { title: 'broken screen' , description: 'bullet hole'};
-
-//Ticket.insertMany(ticket01); 
 
 mongoose.connect("mongodb+srv://adminSaul:test123@cluster0.pyekv.mongodb.net/SampleDB?retryWrites=true&w=majority" , {useNewUrlParser: true , useUnifiedTopology: true}); 
 
 //let samp01 = { name: 'saul' , age: '24'}; 
 //Sample.insertMany(samp01);
 
-// let samp02 = { name: 'luis' , age: '23'}; 
-//  Sample.insertMany(samp02);
 
-// let samp04 = { name: 'mayra' , age: '27'}; 
-//  Sample.insertMany(samp04);
 
 app.get("/", function(require, response){
     response.send("hello world ");
