@@ -36,9 +36,10 @@ mongoose.connect("mongodb+srv://adminSaul:test123@cluster0.pyekv.mongodb.net/Sam
 
 
 // activate filter value 
-let filterName = 0 ; 
-let noFilter  = 0 ; 
-let filterAge = 0 ; 
+// let filterName = 0 ; 
+// let noFilter  = 0 ; 
+// let filterAge = 0 ; 
+let filterVal = 0;
 
 
 // timestamp in seconds 
@@ -54,46 +55,49 @@ app.get("/", function(require, response){
 
 // console.log("----------------------------"); 
 
-if(noFilter === 0 || filterName === undefined && filterAge == undefined ){
-Sample.find({}, function( err, foundUsers){
-
-    // found all the documents and stored them on found users 
-        if( ! err){
-
-            response.render('dashboard', { dataList : foundUsers}); 
-    }
- 
-    }); 
-}// end of if 
+    // if(noFilter === 0 || filterName === undefined && filterAge == undefined ){}
 
     // if filter button is pressed then filter items 
     //noFilter === undefined && filterAge == undefined 
-else  if ( filterName === '1' ){
-    Sample.find().sort({name:1}).exec(function( err, sortedUsers){
 
-                if( !err ){
-                    response.render('dashboard' , { dataList : sortedUsers }); 
-                }
-           });
-}
-//noFilter === undefined && filterName === undefined
-else if ( filterAge === '3' ){
-    Sample.find().sort({age:1}).exec(function( err, sortedUsersByAge){
+    
+    // 1) filters by name
+    // 2) filters by age
+    // 3) undo the work
+    if ( filterVal === '1' ){
+        Sample.find().sort({name:1}).exec(function( err, sortedUsers){
+            if( !err ){
+                response.render('dashboard' , { dataList : sortedUsers }); 
+            }
+        });
+    }
+    //noFilter === undefined && filterName === undefined
+    else if ( filterVal === '2' ){
+        Sample.find().sort({age:1}).exec(function( err, sortedUsersByAge){
 
         if( !err ){
             response.render('dashboard' , { dataList : sortedUsersByAge }); 
         }
-   });
-}
+    });
+    }
+    else {
+        Sample.find({}, function( err, foundUsers){
+            // found all the documents and stored them on found users 
+            if( ! err){
+                response.render('dashboard', { dataList : foundUsers}); 
+            }
+        }); 
+    }
  
 }); 
 
 app.post("/trigger", function( require, response){
 
 
-    filterName = require.body.filterName; 
-    noFilter = require.body.undoFilter; 
-    filterAge = require.body.filterAge; 
+    // filterName = require.body.filterName; 
+    // noFilter = require.body.undoFilter; 
+    // filterAge = require.body.filterAge; 
+    filterVal = require.body.filter
 
     response.redirect("/")
 
