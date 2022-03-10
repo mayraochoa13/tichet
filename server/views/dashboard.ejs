@@ -10,8 +10,20 @@
  
    <table style="margin-left: auto; margin-right: auto;">
        <tr>
-           <th> Name </th>
-           <th> Age </th>
+        <form action="/trigger" method="post">
+           <th> 
+                Name
+                <button type="submit" name="filterName" value = "1"> ^ </button>
+                <button type="submit" name="undoFilter" value = "2"> ~ </button>
+
+        </th>
+
+        <th> 
+            Age 
+            <button type="submit" name="filterAge" value = "3"> ^ </button>
+            <button type="submit" name="undoFilter" value = "2"> ~ </button>
+        </th>
+            </form>
        </tr>
  
        <!-- insert user data from sample DB -->
