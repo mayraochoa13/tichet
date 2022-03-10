@@ -1,0 +1,24 @@
+{
+  "name": "tichet",
+  "version": "1.0.0",
+  "description": "a ticket management system for techsquad",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mayraochoa13/tichet.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mayraochoa13/tichet/issues"
+  },
+  "homepage": "https://github.com/mayraochoa13/tichet#readme",
+  "dependencies": {
+    "express": "^4.17.3",
+    "mongoose": "^6.2.4",
+    "nodemon": "^2.0.15"
+  }
+}
