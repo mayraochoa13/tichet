@@ -14,10 +14,13 @@ const bodyParser = require("body-parser");
 // use ejs 
 app.set('view engine' , 'ejs');
 
-
 // use body parser 
 app.use(bodyParser.json()); 
 app.use(bodyParser.urlencoded({extended:true }));
+
+// connecting css to the server
+const path = require('path')
+app.use('/static', express.static(path.join(__dirname, 'public')))
 
 
 // import database schema 
@@ -31,19 +34,8 @@ const Sample = require('./models/sample');
 
 mongoose.connect("mongodb+srv://adminSaul:test123@cluster0.pyekv.mongodb.net/SampleDB?retryWrites=true&w=majority" , {useNewUrlParser: true , useUnifiedTopology: true}); 
 
-//let samp01 = { name: 'saul' , age: '24'}; 
-//Sample.insertMany(samp01);
-
-
 // activate filter value 
-// let filterName = 0 ; 
-// let noFilter  = 0 ; 
-// let filterAge = 0 ; 
 let filterVal = 0;
-
-
-// timestamp in seconds 
-
 
 
 app.get("/", function(require, response){
@@ -60,7 +52,7 @@ app.get("/", function(require, response){
     // if filter button is pressed then filter items 
     //noFilter === undefined && filterAge == undefined 
 
-    
+
     // 1) filters by name
     // 2) filters by age
     // 3) undo the work
