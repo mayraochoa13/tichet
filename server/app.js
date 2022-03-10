@@ -35,20 +35,71 @@ mongoose.connect("mongodb+srv://adminSaul:test123@cluster0.pyekv.mongodb.net/Sam
 //Sample.insertMany(samp01);
 
 
+// activate filter value 
+let filterName = 0 ; 
+let noFilter  = 0 ; 
+let filterAge = 0 ; 
+
+
+// timestamp in seconds 
+
+
 
 app.get("/", function(require, response){
-   // response.send("hello world ");
-// need to get/find all the data database and send it over to dashboard.ejs 
 
+
+// console.log( "no filter : " + noFilter);
+// console.log( "filter by name : " + filterName );
+// console.log("filter by age : " + filterAge);
+
+// console.log("----------------------------"); 
+
+if(noFilter === 0 || filterName === undefined && filterAge == undefined ){
 Sample.find({}, function( err, foundUsers){
 
-    if( ! err){
+    // found all the documents and stored them on found users 
+        if( ! err){
 
             response.render('dashboard', { dataList : foundUsers}); 
     }
-})
-   //response.render('dashboard'); 
-})
+ 
+    }); 
+}// end of if 
+
+    // if filter button is pressed then filter items 
+    //noFilter === undefined && filterAge == undefined 
+else  if ( filterName === '1' ){
+    Sample.find().sort({name:1}).exec(function( err, sortedUsers){
+
+                if( !err ){
+                    response.render('dashboard' , { dataList : sortedUsers }); 
+                }
+           });
+}
+//noFilter === undefined && filterName === undefined
+else if ( filterAge === '3' ){
+    Sample.find().sort({age:1}).exec(function( err, sortedUsersByAge){
+
+        if( !err ){
+            response.render('dashboard' , { dataList : sortedUsersByAge }); 
+        }
+   });
+}
+ 
+}); 
+
+app.post("/trigger", function( require, response){
+
+
+    filterName = require.body.filterName; 
+    noFilter = require.body.undoFilter; 
+    filterAge = require.body.filterAge; 
+
+    response.redirect("/")
+
+}); 
+
+
 app.get("/newUser" , function( require, response){
 
     response.render('newUserForm'); 
@@ -101,7 +152,8 @@ app.listen(3000, function(){
 });
 
 // npm install mongoose
-
+// errors 
+    // npm i mongoose express ejs 
 
 // next steps 
 // 1) import database schema + model (x)
