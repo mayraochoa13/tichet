@@ -64,31 +64,32 @@ app.get("/", function(require, response){
     // 1) filters by name
     // 2) filters by age
     // 3) undo the work
-    if ( filterVal === '1' ){
-        Sample.find().sort({name:1}).exec(function( err, sortedUsers){
-            if( !err ){
-                response.render('dashboard' , { dataList : sortedUsers }); 
-            }
-        });
-    }
-    //noFilter === undefined && filterName === undefined
-    else if ( filterVal === '2' ){
-        Sample.find().sort({age:1}).exec(function( err, sortedUsersByAge){
+    switch(filterVal){
+        case "1":
+            Sample.find().sort({name:1}).exec(function( err, sortedUsers){
+                if( !err ){
+                    response.render('dashboard' , { dataList : sortedUsers }); 
+                }
+            });
+            break;
+        case "2":
+            Sample.find().sort({age:1}).exec(function( err, sortedUsersByAge){
 
-        if( !err ){
-            response.render('dashboard' , { dataList : sortedUsersByAge }); 
-        }
-    });
-    }
-    else {
-        Sample.find({}, function( err, foundUsers){
+                if( !err ){
+                    response.render('dashboard' , { dataList : sortedUsersByAge }); 
+                }
+            });
+            break;   
+        default: 
+            Sample.find({}, function( err, foundUsers){
             // found all the documents and stored them on found users 
-            if( ! err){
-                response.render('dashboard', { dataList : foundUsers}); 
-            }
-        }); 
+                if( ! err){
+                    response.render('dashboard', { dataList : foundUsers}); 
+                }
+            }); 
+            break;
     }
- 
+
 }); 
 
 app.post("/trigger", function( require, response){
