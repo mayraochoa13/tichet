@@ -37,17 +37,50 @@ app.use(bodyParser.urlencoded({extended:true }));
 const path = require('path')
 app.use('/static', express.static(path.join(__dirname, 'public')))
 
+// start session 
+app.use(session({
+    secret:"any string",
+    resave: false,
+    saveUninitialized: false
+})); 
+
+// initialize passport 
+app.use(passport.initialize());
+
+// use passport to deal with session 
+app.use(passport.session()); 
+
 
 // import database schema 
 //import Ticket from "./models/ticket"; 
-
-// import model 
 const Sample = require('./models/sample'); 
 // connect mongoose database 
 // mongoose.connect("mongodb://localhost:27017/TicketsDB" , {useNewUrlParser: true , useUnifiedTopology: true}); 
 
 
 mongoose.connect("mongodb+srv://adminSaul:test123@cluster0.pyekv.mongodb.net/SampleDB?retryWrites=true&w=majority" , {useNewUrlParser: true , useUnifiedTopology: true}); 
+
+// i attempted to create a new model/schema outside in the ./model but i need to work with passport 
+// so i will figure out how to move this user model/schema to ./model later 
+
+const userSchema= new mongoose.Schema( { 
+    email:  String, 
+    password: String 
+});
+
+// add passport local mongoose as a plug in for userSchema 
+userSchema.plugin(passportLocalMongoose); 
+
+const User = new mongoose.model("User", userSchema); 
+
+// passport local configurations 
+passport.use(User.createStrategy()); 
+
+// serialise creates a cookie 
+passport.serializeUser(User.serializeUser()); 
+
+// decode cookie message 
+passport.deserializeUser(User.deserializeUser()); 
 
 // activate filter value 
 let filterVal = 0;
