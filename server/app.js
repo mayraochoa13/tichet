@@ -8,6 +8,21 @@ const app = express();
 
 const mongoose  = require("mongoose");
 
+// going to use three packages and installing using npm 
+
+// express session 
+const session = require('express-session'); 
+
+// passport js 
+const passport = require('passport'); 
+
+// passport-local-mongoose 
+const passportLocalMongoose = require('passport-local-passport'); 
+
+// also passport-local but i do not need to require it but it was installed 
+// npm i passport passport-local passport-local-mongoose express-session 
+
+
 // require body parser 
 const bodyParser = require("body-parser"); 
 
