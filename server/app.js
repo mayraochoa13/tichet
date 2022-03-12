@@ -96,6 +96,11 @@ app.post("/trigger", function( require, response){
 
 }); 
 
+app.get("/home", function( req, res){
+
+    res.render("home"); 
+})
+
 
 app.get("/newUser" , function( require, response){
 
