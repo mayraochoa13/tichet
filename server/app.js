@@ -88,7 +88,9 @@ let filterVal = 0;
 
 app.get("/", function(req, res){
 
+// this is the route we want to make sure user is authenticated 
 
+if( req.isAuthenticated()){// check authentication 
 // console.log( "no filter : " + noFilter);
 // console.log( "filter by name : " + filterName );
 // console.log("filter by age : " + filterAge);
@@ -129,6 +131,12 @@ app.get("/", function(req, res){
             }); 
             break;
     }
+}// end authentication if statement 
+
+else{
+    // they are not authenticated, send them to log in 
+    res.redirect('/login'); 
+}
 
 }); 
 
