@@ -157,6 +157,28 @@ app.get('/register', function( req , res ){
     res.render("register");
 }); 
 
+// lets collect user details to register and authenticate 
+
+app.post('/register', function( req , res ){
+    
+    // use method register from the passport mongoose package 
+User.register({username: req.body.username}, req.body.password, function( err, user){
+
+    if( err ){
+        console.log( err ); 
+        res.redirect("/register"); 
+    }
+    //else {
+        // if no errors we will authenticate our user using passport 
+        // we are using 'local' strategy 
+            passport.authenticate("local")(req, res, function(){
+                // we authenticated them, so let them see the '/' which has the dashboard 
+                res.redirect("/"); 
+            })
+        }); 
+
+    
+}); 
 
 
 app.get("/newUser" , function( require, response){
