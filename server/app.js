@@ -86,7 +86,7 @@ passport.deserializeUser(User.deserializeUser());
 let filterVal = 0;
 
 
-app.get("/", function(require, response){
+app.get("/", function(req, res){
 
 
 // console.log( "no filter : " + noFilter);
@@ -108,7 +108,7 @@ app.get("/", function(require, response){
         case "1":
             Sample.find().sort({name:1}).exec(function( err, sortedUsers){
                 if( !err ){
-                    response.render('dashboard' , { dataList : sortedUsers }); 
+                    res.render('dashboard' , { dataList : sortedUsers }); 
                 }
             });
             break;
@@ -116,7 +116,7 @@ app.get("/", function(require, response){
             Sample.find().sort({age:1}).exec(function( err, sortedUsersByAge){
 
                 if( !err ){
-                    response.render('dashboard' , { dataList : sortedUsersByAge }); 
+                    res.render('dashboard' , { dataList : sortedUsersByAge }); 
                 }
             });
             break;   
@@ -124,7 +124,7 @@ app.get("/", function(require, response){
             Sample.find({}, function( err, foundUsers){
             // found all the documents and stored them on found users 
                 if( ! err){
-                    response.render('dashboard', { dataList : foundUsers}); 
+                    res.render('dashboard', { dataList : foundUsers}); 
                 }
             }); 
             break;
@@ -158,7 +158,6 @@ app.get('/register', function( req , res ){
 }); 
 
 // lets collect user details to register and authenticate 
-
 app.post('/register', function( req , res ){
     
     // use method register from the passport mongoose package 
@@ -179,6 +178,31 @@ User.register({username: req.body.username}, req.body.password, function( err, u
 
     
 }); 
+
+// let users log in 
+app.post('/login' , function( req, res){
+
+    // create user 
+    const user = new User({
+        username: req.body.username,
+        password: req.body.password
+    }); 
+
+    // log in the user with passport 
+
+    req.login( user , function(err){
+        if(err){
+            console.log(err);
+        }
+
+        // create and send a cookie to browser to let it know user are logged in 
+        passport.authenticate("local")(req, res, function(){
+            // they are allowed to see dashboard 
+            res.redirect('/'); 
+        })
+    })
+}); 
+
 
 
 app.get("/newUser" , function( require, response){
