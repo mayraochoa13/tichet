@@ -97,9 +97,18 @@ app.post("/trigger", function( require, response){
 }); 
 
 app.get("/home", function( req, res){
-
     res.render("home"); 
-})
+}); 
+
+
+app.get("/login", function( req , res ){
+    res.render("login");
+}); 
+
+app.get('/register', function( req , res ){
+    res.render("register");
+}); 
+
 
 
 app.get("/newUser" , function( require, response){
