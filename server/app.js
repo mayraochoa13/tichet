@@ -251,6 +251,13 @@ app.post("/delete", function(require, response){
         })
 }); 
 
+
+app.get('/logout', function( req, res){
+    req.logout();
+
+    // log out and take to log in / register page 
+    res.redirect('/home');
+});
 app.listen(3000, function(){
     console.log("Server started on port 3000");
     
