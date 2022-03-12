@@ -17,7 +17,7 @@ const session = require('express-session');
 const passport = require('passport'); 
 
 // passport-local-mongoose 
-const passportLocalMongoose = require('passport-local-passport'); 
+const passportLocalMongoose = require('passport-local-mongoose'); 
 
 // also passport-local but i do not need to require it but it was installed 
 // npm i passport passport-local passport-local-mongoose express-session 
