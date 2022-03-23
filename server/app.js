@@ -46,48 +46,46 @@ let filterVal = 0;
 
 
 
-app.get("/", function(require, response){
+app.get("/", function(req, res){
+    // this is the route we want to make sure user is authenticated 
 
+    if( req.isAuthenticated()){ // check authentication 
+        // 1) filters by name
+        // 2) filters by age
+        // 3) undo the work
+        switch(filterVal){
+            case "1":
+                Sample.find().sort({name:1}).exec(function( err, sortedUsers){
+                    if( !err ){
+                        res.render('dashboard' , { dataList : sortedUsers }); 
+                    }
+                });
+                break;
+            case "2":
+                Sample.find().sort({age:1}).exec(function( err, sortedUsersByAge){
 
-// console.log( "no filter : " + noFilter);
-// console.log( "filter by name : " + filterName );
-// console.log("filter by age : " + filterAge);
-
-
-    
-    // 1) filters by name
-    // 2) filters by age
-    // 3) undo the work
-    switch(filterVal){
-        case "1":
-            Sample.find().sort({name:1}).exec(function( err, sortedUsers){
-                if( !err ){
-                    response.render('dashboard' , { dataList : sortedUsers }); 
-                }
-            });
-            break;
-        case "2":
-            Sample.find().sort({age:1}).exec(function( err, sortedUsersByAge){
-
-                if( !err ){
-                    response.render('dashboard' , { dataList : sortedUsersByAge }); 
-                }
-            });
-            break;   
-        default: 
-            Sample.find({}, function( err, foundUsers){
-            // found all the documents and stored them on found users 
-                if( ! err){
-                    response.render('dashboard', { dataList : foundUsers}); 
-                }
-            }); 
-            break;
+                    if( !err ){
+                        res.render('dashboard' , { dataList : sortedUsersByAge }); 
+                    }
+                });
+                break;   
+            default: 
+                Sample.find({}, function( err, foundUsers){
+                // found all the documents and stored them on found users 
+                    if( ! err){
+                        res.render('dashboard', { dataList : foundUsers}); 
+                    }
+                }); 
+                break;
+        }
+    }// end authentication if statement 
+    else{
+        // they are not authenticated, send them to log in 
+        res.redirect('/home'); 
     }
-
 }); 
 
 app.post("/trigger", function( require, response){
-
 
     // filterName = require.body.filterName; 
     // noFilter = require.body.undoFilter; 
@@ -98,6 +96,64 @@ app.post("/trigger", function( require, response){
 
 }); 
 
+app.get("/home", function( req, res){
+    res.render("home"); 
+}); 
+
+
+app.get("/login", function( req , res ){
+    res.render("login");
+}); 
+
+app.get('/register', function( req , res ){
+    res.render("register");
+}); 
+
+// lets collect user details to register and authenticate 
+app.post('/register', function( req , res ){
+    
+    // use method register from the passport mongoose package 
+    User.register({username: req.body.username}, req.body.password, function( err, user){
+        if( err ){
+            console.log( err ); 
+            res.redirect("/register"); 
+        }
+        //else {
+        // if no errors we will authenticate our user using passport 
+        // we are using 'local' strategy 
+        passport.authenticate("local")(req, res, function(){
+            // we authenticated them, so let them see the '/' which has the dashboard 
+            res.redirect("/"); 
+        })
+    }); 
+
+}); 
+
+// let users log in 
+app.post('/login' , function( req, res){
+
+    // create user 
+    const user = new User({
+        username: req.body.username,
+        password: req.body.password
+    }); 
+
+    // log in the user with passport 
+
+    req.login( user , function(err){
+        if(err){
+            console.log(err);
+        }
+
+        // create and send a cookie to browser to let it know user are logged in 
+        passport.authenticate("local")(req, res, function(){
+            // they are allowed to see dashboard 
+            res.redirect('/'); 
+        })
+    })
+}); 
+
+
 
 app.get("/newUser" , function( require, response){
 
@@ -106,12 +162,13 @@ app.get("/newUser" , function( require, response){
 
 
 app.post("/newUser" , function( require, response){
-
+    
     const userName = require.body.newName;
     const userAge = require.body.newAge;
-    
+    // console.log(userName[3])
 
     const newUser = { name: userName ,  age : userAge}; 
+
 
     if( userName != undefined && userAge != undefined){
         Sample.insertMany(newUser); 
