@@ -7,6 +7,20 @@ const express = require("express");
 const app = express();
 
 const mongoose  = require("mongoose");
+// going to use three packages and installing using npm 
+
+// express session 
+const session = require('express-session'); 
+
+// passport js 
+const passport = require('passport'); 
+
+// passport-local-mongoose 
+const passportLocalMongoose = require('passport-local-mongoose'); 
+
+// also passport-local but i do not need to require it but it was installed 
+// npm i passport passport-local passport-local-mongoose express-session 
+
 
 // require body parser 
 const bodyParser = require("body-parser"); 
@@ -19,6 +33,22 @@ app.set('view engine' , 'ejs');
 app.use(bodyParser.json()); 
 app.use(bodyParser.urlencoded({extended:true }));
 
+// connecting css to the server
+const path = require('path')
+app.use('/static', express.static(path.join(__dirname, 'public')))
+
+// start session 
+app.use(session({
+    secret:"any string",
+    resave: false,
+    saveUninitialized: false
+})); 
+
+// initialize passport 
+app.use(passport.initialize());
+
+// use passport to deal with session 
+app.use(passport.session()); 
 
 // import database schema 
 //import Ticket from "./models/ticket"; 
@@ -31,9 +61,27 @@ const Sample = require('./models/sample');
 
 mongoose.connect("mongodb+srv://adminSaul:test123@cluster0.pyekv.mongodb.net/SampleDB?retryWrites=true&w=majority" , {useNewUrlParser: true , useUnifiedTopology: true}); 
 
-//let samp01 = { name: 'saul' , age: '24'}; 
-//Sample.insertMany(samp01);
+// i attempted to create a new model/schema outside in the ./model but i need to work with passport 
+// so i will figure out how to move this user model/schema to ./model later 
 
+const userSchema= new mongoose.Schema( { 
+    email:  String, 
+    password: String 
+});
+
+// add passport local mongoose as a plug in for userSchema 
+userSchema.plugin(passportLocalMongoose); 
+
+const User = new mongoose.model("User", userSchema); 
+
+// passport local configurations 
+passport.use(User.createStrategy()); 
+
+// serialise creates a cookie 
+passport.serializeUser(User.serializeUser()); 
+
+// decode cookie message 
+passport.deserializeUser(User.deserializeUser());
 
 // activate filter value 
 // let filterName = 0 ; 
@@ -202,6 +250,13 @@ app.post("/delete", function(require, response){
             }
         })
 }); 
+
+app.get('/logout', function( req, res){
+    req.logout();
+
+    // log out and take to log in / register page 
+    res.redirect('/home');
+});
 
 app.listen(3000, function(){
     console.log("Server started on port 3000");
