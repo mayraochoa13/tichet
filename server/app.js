@@ -43,8 +43,9 @@ let filterVal = 0;
 
 
 // timestamp in seconds 
-
-
+app.get("/test", function(req, res){
+    res.render('manage_users'); 
+});
 
 app.get("/", function(req, res){
     // this is the route we want to make sure user is authenticated 
@@ -229,5 +230,3 @@ app.listen(3000, function(){
 
 
 // if " cannot find x_dependency  " { npm i x_dependency }
-//klfjkfhkhdjkldfhs'sdfbnk;
-//Test
