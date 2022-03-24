@@ -8,6 +8,9 @@ const app = express();
 
 const mongoose  = require("mongoose");
 
+// pass in authRole millware 
+const { authRole } = require('./roleAuth'); 
+
 // going to use three packages and installing using npm 
 
 // express session 
@@ -65,7 +68,8 @@ mongoose.connect("mongodb+srv://adminSaul:test123@cluster0.pyekv.mongodb.net/Sam
 
 const userSchema= new mongoose.Schema( { 
     email:  String, 
-    password: String 
+    password: String, 
+    role: String
 });
 
 // add passport local mongoose as a plug in for userSchema 
@@ -85,8 +89,8 @@ passport.deserializeUser(User.deserializeUser());
 // activate filter value 
 let filterVal = 0;
 
-
-app.get("/", function(req, res){
+// , authRole('admin')
+app.get("/",   function(req, res){
     // this is the route we want to make sure user is authenticated 
 
     if( req.isAuthenticated()){ // check authentication 
@@ -162,6 +166,8 @@ app.post('/register', function( req , res ){
         // if no errors we will authenticate our user using passport 
         // we are using 'local' strategy 
         passport.authenticate("local")(req, res, function(){
+
+           // console.log( req.user.role); 
             // we authenticated them, so let them see the '/' which has the dashboard 
             res.redirect("/"); 
         })
@@ -175,8 +181,13 @@ app.post('/login' , function( req, res){
     // create user 
     const user = new User({
         username: req.body.username,
-        password: req.body.password
+        password: req.body.password, 
+        role: 'admin'
     }); 
+
+// 
+//req.user.role = 'admin'; 
+ 
 
     // log in the user with passport 
 
@@ -187,6 +198,8 @@ app.post('/login' , function( req, res){
 
         // create and send a cookie to browser to let it know user are logged in 
         passport.authenticate("local")(req, res, function(){
+
+            console.log( req.user.role); 
             // they are allowed to see dashboard 
             res.redirect('/'); 
         })
@@ -249,9 +262,31 @@ app.get('/logout', function( req, res){
     // log out and take to log in / register page 
     res.redirect('/home');
 });
+
+app.get('/ManageUsers', function( req, res){
+
+    User.find({}, function( err, foundUsers){
+        //console.log(foundUsers); 
+        res.render('manageUsers',{ ListOfUsers: foundUsers}); 
+
+
+    }); 
+    // res.render('manageUsers'); 
+
+}); 
+
+app.post('/ManageUsers', function( req, res){
+
+  const userIdtoUpdate = req.body.updateStatus; 
+
+  console.log(" id of user to be updated : " + userIdtoUpdate); 
+
+}); 
+
+
 app.listen(3000, function(){
     console.log("Server started on port 3000");
-    
+   
 });
 
 // npm install mongoose

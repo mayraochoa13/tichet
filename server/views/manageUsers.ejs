@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Users</title>
+</head>
+<body>
+    <h1> Manage Users  </h1>
+    <table style="margin-left: auto; margin-right: auto;">
+        <tr>
+            <th> Email </th>
+            <th> Status </th>
+            <th> Update </th>
+
+        </tr>
+        <% ListOfUsers.forEach( function(user) {  %>
+        <tr>
+            <td><%= user.username %></td>
+            <td> <%= user.role %> </td>
+
+            <td> 
+            <form action="/ManageUsers" method="post">
+                <button type="submit" name="updateStatus" value="<%= user._id%>"> + </button>
+            </form>
+            </td>
+        </tr>
+
+
+
+
+
+  
+
+       
+          
+       <% }) %>
+
+       </table>
+   
+</body>
+</html>
