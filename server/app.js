@@ -183,8 +183,16 @@ app.post('/register', function( req , res ){
            // console.log( req.user.role); 
             // we authenticated them, so let them see the '/' which has the dashboard 
 
-            /// update role to 0 === user 
+            // before we redirect need to assign them a role 
+            const updatedRole = { role: 'user'}; // assigning default role = 'user'
 
+            // update user's new role 
+            User.updateOne({_id: req.user._id}, updatedRole, function(err){ // start updateOne()
+                if(!err){
+                    console.log("user's role is assigned ! "); 
+                }
+            });  // end updateOne()
+            
             res.redirect("/"); 
         })
     }); 
@@ -199,10 +207,6 @@ app.post('/login' , function( req, res){
         username: req.body.username,
         password: req.body.password, 
     }); 
-
-// 
-//req.user.role = 'admin'; 
- 
 
     // log in the user with passport 
 
