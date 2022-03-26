@@ -198,7 +198,6 @@ app.post('/login' , function( req, res){
     const user = new User({
         username: req.body.username,
         password: req.body.password, 
-        role: 'user'
     }); 
 
 // 
@@ -215,16 +214,29 @@ app.post('/login' , function( req, res){
         // create and send a cookie to browser to let it know user are logged in 
         passport.authenticate("local")(req, res, function(){
 
-          
+          console.log('user id: ' + req.user._id); 
             // they are allowed to see dashboard 
 
             // check if they have role 
-                // User.find({email: req.body.username}, function(err, user ){
-                    
-                //     // check if User has a role 
+                User.find({_id: req.user._id}, function(err, foundUser ){ // start find()
+                   
+                    // check if User has a role 
+                    if(foundUser[0].role === undefined ){
+                        //they do not have a role, need to update that 
 
-                // })
-               // console.log(req.body); 
+                        // by default every user will have a 'user' role / owner > admin > user 
+                        const updatedRole = { role: 'user'}; 
+
+                        // update user's new role 
+                        User.updateOne({_id: foundUser[0]._id}, updatedRole, function(err){ // start updateOne()
+                            if(!err){
+                                console.log("user's role is updated! "); 
+                            }
+                        });  // end updateOne()
+                    }
+
+                }); // end find()
+               
             res.redirect('/'); 
         })
     })
