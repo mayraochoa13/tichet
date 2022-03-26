@@ -89,21 +89,25 @@ passport.deserializeUser(User.deserializeUser());
 // activate filter value 
 let filterVal = 0;
 
+
 // , authRole('admin')
 app.get("/",    function(req, res){
     // this is the route we want to make sure user is authenticated 
-    let CurrentUserRole = 'Not user'; 
+
   
+        let CurrentUserRole = ''; 
+
         // get user ID form req object 
         const currentUserId = req.user._id ; 
+        
         // look for a user based on that currentUserId and check if user has role 
         User.find({_id: currentUserId}, function( err, foundUser){
             //check role and update the CurrentUserRole 
-            if( !err ){
+           
                 CurrentUserRole = foundUser[0].role;
-            }
-        })
-
+            
+      //  }); 
+       
     if( req.isAuthenticated() && CurrentUserRole === 'admin'){ // check authentication && user's role 
         // 1) filters by name
         // 2) filters by age
@@ -136,9 +140,11 @@ app.get("/",    function(req, res){
     }// end authentication if statement 
     else{
         // they are not authenticated, send them to log in 
-        console.log(req.user); 
+         
         res.redirect('/home'); 
     }
+
+}); // end of find() , need access to the CurrentUserRole
         //}// else end 
 }); 
 
