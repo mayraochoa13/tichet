@@ -92,7 +92,7 @@ let filterVal = 0;
 // , authRole('admin')
 app.get("/",   function(req, res){
     // this is the route we want to make sure user is authenticated 
-
+console.log(req); 
     if( req.isAuthenticated()){ // check authentication 
         // 1) filters by name
         // 2) filters by age
@@ -169,6 +169,9 @@ app.post('/register', function( req , res ){
 
            // console.log( req.user.role); 
             // we authenticated them, so let them see the '/' which has the dashboard 
+
+            /// update role to 0 === user 
+
             res.redirect("/"); 
         })
     }); 
@@ -182,7 +185,7 @@ app.post('/login' , function( req, res){
     const user = new User({
         username: req.body.username,
         password: req.body.password, 
-        role: 'admin'
+        //role: 'admin'
     }); 
 
 // 
@@ -199,8 +202,12 @@ app.post('/login' , function( req, res){
         // create and send a cookie to browser to let it know user are logged in 
         passport.authenticate("local")(req, res, function(){
 
-            console.log( req.user.role); 
+            //console.log( req); 
             // they are allowed to see dashboard 
+
+            // check if they have role 
+            // if they dont add a role , role === 0 => user 
+           // User.updateOne({_id: username}, )
             res.redirect('/'); 
         })
     })
