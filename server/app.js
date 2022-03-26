@@ -214,7 +214,7 @@ app.post('/login' , function( req, res){
         // create and send a cookie to browser to let it know user are logged in 
         passport.authenticate("local")(req, res, function(){
 
-          console.log('user id: ' + req.user._id); 
+          
             // they are allowed to see dashboard 
 
             // check if they have role 
@@ -233,6 +233,9 @@ app.post('/login' , function( req, res){
                                 console.log("user's role is updated! "); 
                             }
                         });  // end updateOne()
+                    }
+                    else {
+                        console.log('user has a role we can access later ')
                     }
 
                 }); // end find()
