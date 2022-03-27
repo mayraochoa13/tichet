@@ -294,16 +294,26 @@ app.post('/ManageUsers', loggedIn,  uOwner,  function( req, res){
     var userID = scrambleIdRole.substr(0, index); // Gets the first part _id
     var ROLE = scrambleIdRole.substr(index + 1);  // Gets role 
 
+    if( ROLE === 'DELETE'){
+        User.deleteOne({_id: userID}, function(err){
+            if( !err){
+                console.log(" successfully deleted user "); 
+            }
+        }); 
+    }
+    else{
 
-    const updatedRole = { role: ROLE}; 
+        const updatedRole = { role: ROLE}; 
 
-    User.updateOne({_id: userID}, updatedRole, function(err){
-        if(!err){
-            console.log("new role updated"); 
-        }
+        User.updateOne({_id: userID}, updatedRole, function(err){
+            if(!err){
+                console.log("new role updated"); 
+            }
     });
-
+    }
     res.redirect('/ManageUsers'); 
+
+    
 
 
 }); 
