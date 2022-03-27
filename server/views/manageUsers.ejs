@@ -9,6 +9,25 @@
 </head>
 <body>
     <h1> Manage Users  </h1>
+
+    <!-- filter dropdown  -->
+    <form  action="/filterUsers" method="post">
+        <select class="selectpicker" data-style="btn-info" name="filter" >
+               
+                <option value="" disabled selected hidden></option>
+                <optgroup label="Filter By"></optgroup>
+                <optgroup label="Role"></optgroup>
+                <option name="user" value="user">user</option>
+                <option name="admin" value="admin">admin</option>
+                <option name="owner" value="owner">owner</option>
+                <optgroup label="Other"></optgroup>
+                <option name="alphabetical" value="az">A-Z</option>
+                <option name="alphabetical" value="all">none</option>
+            
+        </select>
+        <input type="submit" value="Apply"/> 
+    </form>
+
     <table style="margin-left: auto; margin-right: auto;">
         <tr>
             <th> Email </th>

@@ -70,6 +70,8 @@ passport.deserializeUser(User.deserializeUser());
 
 // activate filter value 
 let filterVal = 0;
+// activate filter /ManageUsers 
+let query = null; 
 
 app.get("/",  uAdminOrOwner, loggedIn,  function(req, res){
     // this is the route we want to make sure user is authenticated 
@@ -269,20 +271,38 @@ app.get('/logout', function( req, res){
     res.redirect('/home');
 });
 
-app.get('/ManageUsers', loggedIn,  uOwner,   function( req, res){
+//loggedIn,  uOwner, 
+app.get('/ManageUsers',  function( req, res){
 
-    
-    User.find({}, function( err, foundUsers){
-        //console.log(foundUsers); 
-        res.render('manageUsers',{ ListOfUsers: foundUsers}); 
+    if( query === null || query === undefined || query === 'all'){
+
+        
+        User.find({}, function( err, foundUsers){
+            //console.log(foundUsers); 
+            res.render('manageUsers',{ ListOfUsers: foundUsers}); 
 
 
     }); 
-    
-
+    }
+    else if(query === 'az'){
+        
+            User.find().sort({username:1}).exec(function( err, foundUserInRole){
+                if( !err ){
+                    res.render('manageUsers',{ ListOfUsers: foundUserInRole}); 
+                }
+            });
+    }
+    else {
+        User.find({role: query}, function(err, foundUserInRole){
+                        if(!err){
+                            res.render('manageUsers',{ ListOfUsers: foundUserInRole});
+                        }
+                    }); 
+    }
 }); 
 
-app.post('/ManageUsers', loggedIn,  uOwner,  function( req, res){
+//loggedIn,  uOwner, 
+app.post('/ManageUsers',  function( req, res){
 
 
     
@@ -318,6 +338,13 @@ app.post('/ManageUsers', loggedIn,  uOwner,  function( req, res){
 
 }); 
 
+
+app.post('/filterUsers', function(req,res){
+     query = req.body.filter; 
+     
+     res.redirect('/ManageUsers'); 
+   
+})
 
 app.listen(3000, function(){
     console.log("Server started on port 3000");
