@@ -96,6 +96,17 @@ function loggedIn(req, res, next) {
     } else {
         res.redirect('/login');
     }
+}; 
+
+// Middleware to check user's role 
+function uAdmin(req, res, next){
+    
+    if( req.user.role === 'admin'){
+        next(); 
+    }
+    else {
+        res.redirect('/login');
+    }
 }
 
 // , authRole('admin')
@@ -333,7 +344,7 @@ app.get('/ManageUsers', loggedIn,  function( req, res){
 
 }); 
 
-app.post('/ManageUsers', loggedIn,  function( req, res){
+app.post('/ManageUsers', loggedIn, uAdmin,  function( req, res){
 
 
     
@@ -358,6 +369,10 @@ app.post('/ManageUsers', loggedIn,  function( req, res){
 
 
 }); 
+
+app.get('/testMid', loggedIn,  uAdmin,  function( req, res){
+    res.send(" you are logged In "); 
+});
 
 
 app.listen(3000, function(){
