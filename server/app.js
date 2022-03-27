@@ -1,6 +1,4 @@
 //jshint esversion:6
-
-
 const { response } = require("express");
 const express = require("express");
 
@@ -57,25 +55,9 @@ app.use(passport.session());
 // import database schema 
 //import Ticket from "./models/ticket"; 
 const Sample = require('./models/sample'); 
-// connect mongoose database 
-// mongoose.connect("mongodb://localhost:27017/TicketsDB" , {useNewUrlParser: true , useUnifiedTopology: true}); 
-
+const User = require('./models/User'); 
 
 mongoose.connect("mongodb+srv://adminSaul:test123@cluster0.pyekv.mongodb.net/SampleDB?retryWrites=true&w=majority" , {useNewUrlParser: true , useUnifiedTopology: true}); 
-
-// i attempted to create a new model/schema outside in the ./model but i need to work with passport 
-// so i will figure out how to move this user model/schema to ./model later 
-
-const userSchema= new mongoose.Schema( { 
-    email:  String, 
-    password: String, 
-    role: String
-});
-
-// add passport local mongoose as a plug in for userSchema 
-userSchema.plugin(passportLocalMongoose); 
-
-const User = new mongoose.model("User", userSchema); 
 
 // passport local configurations 
 passport.use(User.createStrategy()); 
@@ -210,8 +192,8 @@ app.post('/register', function( req , res ){
                     console.log("user's role is assigned ! "); 
                 }
             });  // end updateOne()
-            
-            res.redirect("/"); 
+            // redirect to somewhere any body can access, the 'create form' will be in this route// or replaced by it in the future 
+            res.redirect("/newUser"); 
         })
     }); 
 
@@ -262,7 +244,8 @@ app.post('/login' , function( req, res){
 
                 }); // end find()
                
-            res.redirect('/'); 
+            // redirect to somewhere any body can access, the 'create form' will be in this route// or replaced by it in the future 
+            res.redirect("/newUser"); 
         })
     })
 }); 
@@ -369,24 +352,3 @@ app.listen(3000, function(){
    
 });
 
-// npm install mongoose
-// errors 
-    // npm i mongoose express ejs 
-
-// next steps 
-// 1) import database schema + model (x)
-// 2) connect it to Mongodb Atlas 
-// 3) create the from/ticket 
-//      - route "/newTicket"
-//     - get the user input using ejs, body-parser 
-//     -  finish the route , we have the data now we just need to insert to db 
-// 4) creat dashboard with ticket summary data <input name= "status"
-// == from users can submit , a dashboard one can see a list of submissions 
-//        4 a) query and find all the tickets made 
-//          b) display 
-//          c) query for specific tickets and find them and display them 
-// 
-// CRUD = > create , read , update , delete 
-
-
-// if " cannot find x_dependency  " { npm i x_dependency }
