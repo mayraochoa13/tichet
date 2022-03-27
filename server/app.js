@@ -89,6 +89,14 @@ passport.deserializeUser(User.deserializeUser());
 // activate filter value 
 let filterVal = 0;
 
+// Middleware to check if user is logged in 
+function loggedIn(req, res, next) {
+    if (req.user) {
+        next();
+    } else {
+        res.redirect('/login');
+    }
+}
 
 // , authRole('admin')
 app.get("/",    function(req, res){
@@ -312,19 +320,20 @@ app.get('/logout', function( req, res){
     res.redirect('/home');
 });
 
-app.get('/ManageUsers', function( req, res){
+app.get('/ManageUsers', loggedIn,  function( req, res){
 
+    
     User.find({}, function( err, foundUsers){
         //console.log(foundUsers); 
         res.render('manageUsers',{ ListOfUsers: foundUsers}); 
 
 
     }); 
-    // res.render('manageUsers'); 
+    
 
 }); 
 
-app.post('/ManageUsers', function( req, res){
+app.post('/ManageUsers', loggedIn,  function( req, res){
 
 
     
