@@ -274,6 +274,7 @@ app.get('/logout', function( req, res){
 //loggedIn,  uOwner, 
 app.get('/ManageUsers',  function( req, res){
 
+    console.log(query +  " ==== " + null); 
     if( query === null || query === undefined || query === 'all'){
 
         
@@ -283,6 +284,7 @@ app.get('/ManageUsers',  function( req, res){
 
 
     }); 
+            //res.redirect('/ManageUsers');
     }
     else if(query === 'az'){
         
@@ -299,6 +301,7 @@ app.get('/ManageUsers',  function( req, res){
                         }
                     }); 
     }
+    //res.redirect('/ManageUsers'); 
 }); 
 
 //loggedIn,  uOwner, 
@@ -306,7 +309,7 @@ app.post('/ManageUsers',  function( req, res){
 
 
     
-    const scrambleIdRole= req.body.selectpicker; 
+    const scrambleIdRole= req.body.selectROLE; 
 
     // scrambleIdRole has id and role in one, i need to separate it 
 
@@ -319,6 +322,7 @@ app.post('/ManageUsers',  function( req, res){
             if( !err){
                 console.log(" successfully deleted user "); 
             }
+            res.redirect('/ManageUsers'); 
         }); 
     }
     else{
@@ -329,9 +333,10 @@ app.post('/ManageUsers',  function( req, res){
             if(!err){
                 console.log("new role updated"); 
             }
+            res.redirect('/ManageUsers'); 
     });
     }
-    res.redirect('/ManageUsers'); 
+    // res.redirect('/ManageUsers'); 
 
     
 

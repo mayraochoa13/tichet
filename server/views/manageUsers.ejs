@@ -39,12 +39,13 @@
         <tr>
             <td><%= user.username %></td>
             
-
+           
             <td> 
                 <form  action="/ManageUsers" method="post">
-                    <select class="selectpicker" data-style="btn-info" name="selectpicker" >
+                    <select class="selectpicker" data-style="btn-info" name="selectROLE" >
                            
-                            <option value="" disabled selected hidden><%= user.role %></option>
+                            <!-- <option value="" disabled selected hidden><%= user.role %></option> -->
+                           <option value="" disabled selected hidden><%= user.role %></option>
                             <optgroup label="Switch Role"></optgroup>
                             <option name="user" value="<%= user._id %>$user">user</option>
                             <option name="admin" value="<%= user._id %>$admin">admin</option>
