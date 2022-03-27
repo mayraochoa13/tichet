@@ -12,22 +12,32 @@
     <table style="margin-left: auto; margin-right: auto;">
         <tr>
             <th> Email </th>
-            <th> Status </th>
+            
             <th> Update </th>
 
         </tr>
         <% ListOfUsers.forEach( function(user) {  %>
         <tr>
             <td><%= user.username %></td>
-            <td> <%= user.role %> </td>
+            
 
             <td> 
-            <form action="/ManageUsers" method="post">
-                <button type="submit" name="updateStatus" value="<%= user._id%>"> + </button>
+                <form  action="/ManageUsers" method="post">
+                    <select class="selectpicker" data-style="btn-info" name="selectpicker" >
+                           
+                            <option value="" disabled selected hidden><%= user.role %></option>
+                            <optgroup label="Switch Role"></optgroup>
+                            <option name="user" value="<%= user._id %>$user">user</option>
+                            <option name="admin" value="<%= user._id %>$admin">admin</option>
+                            <option name="owner" value="<%= user._id %>$owner">owner</option>
+                        
+                    </select>
+                    <input type="submit"/> 
+                </form>
             </form>
             </td>
         </tr>
-
+  
 
 
 

@@ -326,9 +326,27 @@ app.get('/ManageUsers', function( req, res){
 
 app.post('/ManageUsers', function( req, res){
 
-  const userIdtoUpdate = req.body.updateStatus; 
 
-  console.log(" id of user to be updated : " + userIdtoUpdate); 
+    
+    const scrambleIdRole= req.body.selectpicker; 
+
+    // scrambleIdRole has id and role in one, i need to separate it 
+
+    var index = scrambleIdRole.indexOf("$");  // Gets the first index where a '$' 
+    var userID = scrambleIdRole.substr(0, index); // Gets the first part _id
+    var ROLE = scrambleIdRole.substr(index + 1);  // Gets role 
+
+
+    const updatedRole = { role: ROLE}; 
+
+    User.updateOne({_id: userID}, updatedRole, function(err){
+        if(!err){
+            console.log("new role updated"); 
+        }
+    });
+
+    res.redirect('/ManageUsers'); 
+
 
 }); 
 
