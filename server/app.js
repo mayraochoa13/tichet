@@ -6,8 +6,8 @@ const app = express();
 
 const mongoose  = require("mongoose");
 
-// pass in authRole millware 
-const { authRole } = require('./roleAuth'); 
+// pass in authRole middleware 
+const { loggedIn, uAdminOrOwner,uOwner } = require('./roleAuth'); 
 
 // going to use three packages and installing using npm 
 
@@ -70,44 +70,6 @@ passport.deserializeUser(User.deserializeUser());
 
 // activate filter value 
 let filterVal = 0;
-
-// Middleware to check if user is logged in 
-function loggedIn(req, res, next) {
-
-    if (req.user) {
-        next();
-    } else {
-        res.redirect('/login');
-    }
-}; 
-
-// Middleware to check user's role 
-function uAdminOrOwner(req, res, next){
-    // both can access, no 'user' allowed 
-    if( req.user === undefined){
-            res.redirect('/login')
-    }
-    else if( req.user.role === 'admin' || req.user.role === 'owner' ){
-        next(); 
-    }
-    else {
-        res.redirect('/login');
-    }
-}; 
-
-function uOwner (req, res, next){
-    // only owner can access, no 'admin' or 'user' 
-    if( req.user === undefined){
-        res.redirect('/login')
-    }
-    else if( req.user.role === 'owner'){
-        next(); 
-    }
-    else {
-        res.redirect('/login');
-    }
-}; 
-
 
 app.get("/",  uAdminOrOwner, loggedIn,  function(req, res){
     // this is the route we want to make sure user is authenticated 
