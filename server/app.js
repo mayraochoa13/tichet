@@ -91,6 +91,7 @@ let filterVal = 0;
 
 // Middleware to check if user is logged in 
 function loggedIn(req, res, next) {
+
     if (req.user) {
         next();
     } else {
@@ -101,7 +102,10 @@ function loggedIn(req, res, next) {
 // Middleware to check user's role 
 function uAdminOrOwner(req, res, next){
     // both can access, no 'user' allowed 
-    if( req.user.role === 'admin' || req.user.role === 'owner' ){
+    if( req.user === undefined){
+            res.redirect('/login')
+    }
+    else if( req.user.role === 'admin' || req.user.role === 'owner' ){
         next(); 
     }
     else {
@@ -111,7 +115,10 @@ function uAdminOrOwner(req, res, next){
 
 function uOwner (req, res, next){
     // only owner can access, no 'admin' or 'user' 
-    if( req.user.role === 'owner'){
+    if( req.user === undefined){
+        res.redirect('/login')
+    }
+    else if( req.user.role === 'owner'){
         next(); 
     }
     else {
