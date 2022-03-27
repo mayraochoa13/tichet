@@ -99,35 +99,29 @@ function loggedIn(req, res, next) {
 }; 
 
 // Middleware to check user's role 
-function uAdmin(req, res, next){
-    
-    if( req.user.role === 'admin'){
+function uAdminOrOwner(req, res, next){
+    // both can access, no 'user' allowed 
+    if( req.user.role === 'admin' || req.user.role === 'owner' ){
         next(); 
     }
     else {
         res.redirect('/login');
     }
-}
+}; 
 
-// , authRole('admin')
-app.get("/",    function(req, res){
+function uOwner (req, res, next){
+    // only owner can access, no 'admin' or 'user' 
+    if( req.user.role === 'owner'){
+        next(); 
+    }
+    else {
+        res.redirect('/login');
+    }
+}; 
+
+
+app.get("/",  uAdminOrOwner, loggedIn,  function(req, res){
     // this is the route we want to make sure user is authenticated 
-
-  
-        let CurrentUserRole = ''; 
-
-        // get user ID form req object 
-        const currentUserId = req.user._id ; 
-        
-        // look for a user based on that currentUserId and check if user has role 
-        User.find({_id: currentUserId}, function( err, foundUser){
-            //check role and update the CurrentUserRole 
-           
-                CurrentUserRole = foundUser[0].role;
-            
-      //  }); 
-       
-    if( req.isAuthenticated() && CurrentUserRole === 'admin'){ // check authentication && user's role 
         // 1) filters by name
         // 2) filters by age
         // 3) undo the work
@@ -156,15 +150,7 @@ app.get("/",    function(req, res){
                 }); 
                 break;
         }
-    }// end authentication if statement 
-    else{
-        // they are not authenticated, send them to log in 
-         
-        res.redirect('/home'); 
-    }
-
-}); // end of find() , need access to the CurrentUserRole
-        //}// else end 
+  
 }); 
 
 app.post("/trigger", function( require, response){
@@ -331,7 +317,7 @@ app.get('/logout', function( req, res){
     res.redirect('/home');
 });
 
-app.get('/ManageUsers', loggedIn,  function( req, res){
+app.get('/ManageUsers', loggedIn,  uOwner,   function( req, res){
 
     
     User.find({}, function( err, foundUsers){
@@ -344,7 +330,7 @@ app.get('/ManageUsers', loggedIn,  function( req, res){
 
 }); 
 
-app.post('/ManageUsers', loggedIn, uAdmin,  function( req, res){
+app.post('/ManageUsers', loggedIn,  uOwner,  function( req, res){
 
 
     
@@ -369,10 +355,6 @@ app.post('/ManageUsers', loggedIn, uAdmin,  function( req, res){
 
 
 }); 
-
-app.get('/testMid', loggedIn,  uAdmin,  function( req, res){
-    res.send(" you are logged In "); 
-});
 
 
 app.listen(3000, function(){
