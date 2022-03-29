@@ -56,7 +56,7 @@ app.use(passport.session());
 //import Ticket from "./models/ticket"; 
 
 // import model 
-const Sample = require('./models/sample'); 
+ 
 const Ticket = require('./models/ticket');
 const User = require('./models/User'); 
 
@@ -184,7 +184,7 @@ app.post('/register', function( req , res ){
 
                     // if role = admin 
             // redirect to somewhere any body can access, the 'create form' will be in this route// or replaced by it in the future 
-            res.redirect("/newUser");  // role==user will always go to this route
+            res.redirect("/userDashboard");  // role==user will always go to this route
         })
     }); 
 
@@ -276,46 +276,7 @@ app.get("/ownerDashboard" , function( req, res){
     });
 });
 
-app.get("/newUser" , function( req, res){
-     // user needs all the tickets they have created 
-     //console.log(req.user); 
-     const UserID = req.user._id; 
-     const Username = req.user.username; 
-     
-    //  Ticket.find({user_id: UserId}, function(err, foundTickets){
-
-        // render that list of tickets 
-
-    //  }); 
-
-    res.render('newUserForm'); 
-})
-
-
-app.post("/newUser" , function( req, res){
-     const UserID = req.user._id; 
-     const Username = req.user.username; 
-     console.log("post");
-     console.log(UserID);
-     console.log(Username);
-    const userName = require.body.newName;
-    const userAge = require.body.newAge;
-    // console.log(userName[3])
-
-    const newUser = { name: userName ,  age : userAge}; 
-
-
-    if( userName != undefined && userAge != undefined){
-        Sample.insertMany(newUser); 
-
-        response.redirect("/newUser"); 
-    }
-    else {
-        console.log( " name is : " + userName); 
-        console.log( " age is : " + userAge); 
-    }
-   
-}) 
+ 
 
 app.post("/delete", function(require, response){
 
