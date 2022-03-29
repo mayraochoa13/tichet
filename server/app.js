@@ -5,10 +5,13 @@ const express = require("express");
 const app = express();
 
 const mongoose  = require("mongoose");
+<<<<<<< HEAD
 
 // pass in authRole middleware 
 const { loggedIn, uAdminOrOwner,uOwner } = require('./roleAuth'); 
 
+=======
+>>>>>>> main
 // going to use three packages and installing using npm 
 
 // express session 
@@ -29,6 +32,7 @@ const bodyParser = require("body-parser");
 
 // use ejs 
 app.set('view engine' , 'ejs');
+
 
 // use body parser 
 app.use(bodyParser.json()); 
@@ -51,9 +55,10 @@ app.use(passport.initialize());
 // use passport to deal with session 
 app.use(passport.session()); 
 
-
 // import database schema 
 //import Ticket from "./models/ticket"; 
+
+// import model 
 const Sample = require('./models/sample'); 
 const User = require('./models/User'); 
 
@@ -66,14 +71,27 @@ passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser()); 
 
 // decode cookie message 
-passport.deserializeUser(User.deserializeUser()); 
+passport.deserializeUser(User.deserializeUser());
 
 // activate filter value 
+// let filterName = 0 ; 
+// let noFilter  = 0 ; 
+// let filterAge = 0 ; 
 let filterVal = 0;
 // activate filter /ManageUsers 
 let query = null; 
 
+<<<<<<< HEAD
 app.get("/",  uAdminOrOwner, loggedIn,  function(req, res){
+=======
+
+// timestamp in seconds 
+app.get("/test", function(req, res){
+    res.render('manage_users'); 
+});
+
+app.get("/", function(req, res){
+>>>>>>> main
     // this is the route we want to make sure user is authenticated 
         // 1) filters by name
         // 2) filters by age
@@ -303,7 +321,6 @@ app.post("/delete", function(require, response){
         })
 }); 
 
-
 app.get('/logout', function( req, res){
     req.logout();
 
@@ -311,6 +328,7 @@ app.get('/logout', function( req, res){
     res.redirect('/home');
 });
 
+<<<<<<< HEAD
 //loggedIn,  uOwner, 
 app.get('/ManageUsers',  function( req, res){
 
@@ -391,8 +409,35 @@ app.post('/filterUsers', function(req,res){
    
 })
 
+=======
+>>>>>>> main
 app.listen(3000, function(){
     console.log("Server started on port 3000");
    
 });
 
+<<<<<<< HEAD
+=======
+// npm install mongoose
+// errors 
+    // npm i mongoose express ejs 
+
+// next steps 
+// 1) import database schema + model (x)
+// 2) connect it to Mongodb Atlas 
+// 3) create the from/ticket 
+//      - route "/newTicket"
+//     - get the user input using ejs, body-parser 
+//     -  finish the route , we have the data now we just need to insert to db
+// 3.5 User Authentication  
+// 4) creat dashboard with ticket summary data <input name= "status"
+// == from users can submit , a dashboard one can see a list of submissions 
+//        4 a) query and find all the tickets made 
+//          b) display 
+//          c) query for specific tickets and find them and display them 
+// 
+// CRUD = > create , read , update , delete 
+
+
+// if " cannot find x_dependency  " { npm i x_dependency }
+>>>>>>> main
