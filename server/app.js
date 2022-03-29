@@ -268,13 +268,50 @@ app.get("/adminDashboard" , function( req, res){
 
 
 app.get("/ownerDashboard" , function( req, res){
- 
+    const filter = req.query.filter; 
+  
+    if( filter === 'urgency'){
+       
+        Ticket.find().sort({urgency: 1}).exec(function( err, sortedTickets){
+            if(!err){
+                res.render('viewTickets', {tickets : sortedTickets});
+            }
+        })
+    }
+    else if( filter === 'date'){
+        Ticket.find().sort({created_at: 1}).exec(function( err, sortedTickets){
+            if(!err){
+                res.render('viewTickets', {tickets : sortedTickets});
+            }
+        }) 
+    }
+    else if( filter === 'status'){
+        Ticket.find().sort({status: -1}).exec(function( err, sortedTickets){
+            if(!err){
+                res.render('viewTickets', {tickets : sortedTickets});
+            }
+        }) 
+    }
+    
+    else{
+
+    
     Ticket.find({}, function(err, result){
         if(!err){
             res.render('viewTickets', {tickets : result});
          }
     });
+    }
 });
+
+
+app.post('/filterTickets', function(req,res){
+    //query = req.body.filter; 
+    const filter = req.body.option; 
+   
+    res.redirect('/ownerDashboard/?filter='+filter); 
+  
+})
 
  
 

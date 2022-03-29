@@ -25,13 +25,26 @@
   <h1>View Tickets</h1>
   <table>
     <tr style="background-color:#DEDDDC;">
-      <th>Title</th>
-      <th>Description</th>
-      <th>Urgency</th>
-      <th>Created by</th>
-      <th>Contact</th>
-      <th>Status</th>
-      <th>Timestamp</th>
+
+     <form action="/filterTickets" method="post">
+            <th>Title</th>
+            <th>Description</th>
+              <th>
+                <!-- <form action="/filterTickets" method="post"> -->
+                  <button name="option" value="urgency"> Urgency</button>
+                <!-- </form> -->
+              </th>
+            <th>Created by</th>
+            <th>Contact</th>
+            <th>
+              <button name="option" value="status"> Status</button>
+            </th>
+            <th>
+              <!-- <form action="/filterTickets" method="post"> -->
+                <button name="option" value="date"> Date</button>
+              <!-- </form> -->
+      </th>
+     </form> 
     </tr>
     <% tickets.forEach(function(ticket) {  %>
     <tr>
