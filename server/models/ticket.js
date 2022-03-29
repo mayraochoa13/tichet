@@ -12,11 +12,11 @@ const TicketSchema = new mongoose.Schema({
         type: String, 
         required: true,
     },
-    images:{
-        data: Buffer,
-        contentType: String,
-        required: false, 
-    },
+    // images:{
+    //     data: Buffer,
+    //     contentType: String,
+    //     required: false, 
+    // },
     urgency:{
         type: String , 
         required: true,
@@ -29,17 +29,11 @@ const TicketSchema = new mongoose.Schema({
         type: String, 
         required: true,
     }, 
-    timestamp:{
-        type: Number,
-        required: true,  
-    },
-    actions:{
+    status:{
         type: String, 
         required: true , 
     }
-
-
-}); 
+}, {timestamps: true }); 
 
 const Ticket = mongoose.model("Ticket", TicketSchema); 
 

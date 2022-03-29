@@ -19,18 +19,17 @@
 
 </head>
 <body>
-    <table>
-        <tr>
-          <th>User</th>
-          <th>Email</th>
-          <th>Status</th>
-        </tr>
-        <tr>
-        <td>Mayra</td>
-        <td>mayochoa@csumb.edu</td>
-        <td>Owner</td>
-          
-        </tr>
-      </table>
+  <table>
+    <tr>
+      <th>Email</th>
+      <th>Status</th>
+    </tr>
+    <% users.forEach(function(user) {  %>
+    <tr>
+      <td> <%= user.username %></td>
+      <% }) %>
+    </tr>
+  </table>
+      
 </body>
 </html>

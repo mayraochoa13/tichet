@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Create Ticket</title>
+   <style>
+    form {
+      border: 1px solid #dddddd;
+      text-align: center;
+      padding: 12px;
+    }
+    </style>
+</head>
+<body>
+ 
+   <h1> Add New Ticket </h1>
+   <form action="/createTicket" method="post">
+ 
+       <input type="text" placeholder="title" name="newTitle" autocomplete="off"><br>
+       <input type="text " placeholder="description" name="newDes" autocomplete="off"><br>
+       <select name="newUrg">
+        <option> Select urgency </option>
+        <option value="high" name="newUrg">high</option>
+        <option value="medium" name="newUrg">medium</option>
+        <option value="low" name="newUrg">low</option>
+       </select><br>
+       <input type="text " placeholder="created by" name="newCreatedBy" autocomplete="off"><br>
+       <input type="text " placeholder="contact" name="newContact" autocomplete="off"><br>
+       <select name="newStatus">
+        <option> Select status </option>
+        <option value="pending" name="newStatus">pending</option>
+        <option value="completed" name="newStatus">completed</option>
+       </select><br><br>
+       <button type="submit" > add ticket </button>
+ 
+   </form>
+</body>
+</html>

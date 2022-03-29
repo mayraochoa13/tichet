@@ -54,7 +54,7 @@ app.use(passport.session());
 //import Ticket from "./models/ticket"; 
 
 // import model 
-const Sample = require('./models/sample'); 
+const Sample = require('./models/ticket.js'); 
 // connect mongoose database 
 // mongoose.connect("mongodb://localhost:27017/TicketsDB" , {useNewUrlParser: true , useUnifiedTopology: true}); 
 
@@ -90,7 +90,7 @@ passport.deserializeUser(User.deserializeUser());
 let filterVal = 0;
 
 
-// timestamp in seconds 
+// display users 
 app.get("/test", function(req, res){ 
     User.find({}, function(err, result){
         if(!err){
@@ -107,31 +107,38 @@ app.get("/", function(req, res){
         // 1) filters by name
         // 2) filters by age
         // 3) undo the work
-        switch(filterVal){
-            case "1":
-                Sample.find().sort({name:1}).exec(function( err, sortedUsers){
-                    if( !err ){
-                        res.render('dashboard' , { dataList : sortedUsers }); 
-                    }
-                });
-                break;
-            case "2":
-                Sample.find().sort({age:1}).exec(function( err, sortedUsersByAge){
+        Sample.find({}, function( err, foundUsers){
+            // found all the documents and stored them on found users 
+                if( ! err){
+                    res.render('dashboard', { dataList : foundUsers}); 
+                    console.log(foundUsers);
+                }
+            });
+        // switch(filterVal){
+        //     case "1":
+        //         Sample.find().sort({name:1}).exec(function( err, sortedUsers){
+        //             if( !err ){
+        //                 res.render('dashboard' , { dataList : sortedUsers }); 
+        //             }
+        //         });
+        //         break;
+        //     case "2":
+        //         Sample.find().sort({age:1}).exec(function( err, sortedUsersByAge){
 
-                    if( !err ){
-                        res.render('dashboard' , { dataList : sortedUsersByAge }); 
-                    }
-                });
-                break;   
-            default: 
-                Sample.find({}, function( err, foundUsers){
-                // found all the documents and stored them on found users 
-                    if( ! err){
-                        res.render('dashboard', { dataList : foundUsers}); 
-                    }
-                }); 
-                break;
-        }
+        //             if( !err ){
+        //                 res.render('dashboard' , { dataList : sortedUsersByAge }); 
+        //             }
+        //         });
+        //         break;   
+        //     default: 
+        //         Sample.find({}, function( err, foundUsers){
+        //         // found all the documents and stored them on found users 
+        //             if( ! err){
+        //                 res.render('dashboard', { dataList : foundUsers}); 
+        //             }
+        //         }); 
+        //         break;
+        // }
     }// end authentication if statement 
     else{
         // they are not authenticated, send them to log in 
@@ -266,6 +273,40 @@ app.get('/logout', function( req, res){
 app.listen(3000, function(){
     console.log("Server started on port 3000");
     
+});
+app.get("/createTicket" , function( require, response){
+
+    response.render('createTicket'); 
+})
+app.post('/createTicket', function(require, response){
+
+    const ticketTitle = require.body.newTitle;
+    const ticketDes = require.body.newDes;
+    const ticketUrgency = require.body.newUrg;
+    const ticketCreatedBy = require.body.newCreatedBy;
+    const ticketContact = require.body.newContact;
+    const ticketStatus= require.body.newStatus;
+
+    const newTicket = { title: ticketTitle ,  description : ticketDes, urgency: ticketUrgency, createdBy: ticketCreatedBy, contact: ticketContact, status:ticketStatus}; 
+
+
+    if( ticketTitle != undefined && ticketDes != undefined){
+        Sample.insertMany(newTicket); 
+
+        response.redirect("/"); 
+    }
+    else {
+        console.log( " title: " + ticketTitle); 
+        console.log( " description : " + ticketDes); 
+    }
+});
+//Display Tickets
+app.get("/viewTickets", function(req, res){ 
+    Sample.find({}, function(err, result){
+        if(!err){
+            res.render('viewTickets', {tickets : result});
+         }
+    });
 });
 
 // npm install mongoose
