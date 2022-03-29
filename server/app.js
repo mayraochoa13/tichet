@@ -5,13 +5,10 @@ const express = require("express");
 const app = express();
 
 const mongoose  = require("mongoose");
-<<<<<<< HEAD
 
 // pass in authRole middleware 
 const { loggedIn, uAdminOrOwner,uOwner } = require('./roleAuth'); 
 
-=======
->>>>>>> main
 // going to use three packages and installing using npm 
 
 // express session 
@@ -81,17 +78,7 @@ let filterVal = 0;
 // activate filter /ManageUsers 
 let query = null; 
 
-<<<<<<< HEAD
 app.get("/",  uAdminOrOwner, loggedIn,  function(req, res){
-=======
-
-// timestamp in seconds 
-app.get("/test", function(req, res){
-    res.render('manage_users'); 
-});
-
-app.get("/", function(req, res){
->>>>>>> main
     // this is the route we want to make sure user is authenticated 
         // 1) filters by name
         // 2) filters by age
@@ -328,7 +315,6 @@ app.get('/logout', function( req, res){
     res.redirect('/home');
 });
 
-<<<<<<< HEAD
 //loggedIn,  uOwner, 
 app.get('/ManageUsers',  function( req, res){
 
@@ -409,15 +395,11 @@ app.post('/filterUsers', function(req,res){
    
 })
 
-=======
->>>>>>> main
 app.listen(3000, function(){
     console.log("Server started on port 3000");
    
 });
 
-<<<<<<< HEAD
-=======
 // npm install mongoose
 // errors 
     // npm i mongoose express ejs 
@@ -440,4 +422,3 @@ app.listen(3000, function(){
 
 
 // if " cannot find x_dependency  " { npm i x_dependency }
->>>>>>> main
