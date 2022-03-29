@@ -57,6 +57,7 @@ app.use(passport.session());
 
 // import model 
 const Sample = require('./models/sample'); 
+const Ticket = require('./models/ticket');
 const User = require('./models/User'); 
 
 mongoose.connect("mongodb+srv://adminSaul:test123@cluster0.pyekv.mongodb.net/SampleDB?retryWrites=true&w=majority" , {useNewUrlParser: true , useUnifiedTopology: true}); 
@@ -89,7 +90,7 @@ app.get("/test", function(req, res){
     });
 });
 
-app.get("/", function(req, res){
+//app.get("/", function(req, res){
 app.get("/",  uAdminOrOwner, loggedIn,  function(req, res){
     // this is the route we want to make sure user is authenticated 
         // 1) filters by name
@@ -236,7 +237,7 @@ app.post('/login' , function( req, res){
                                res.redirect("/adminDashboard");
                             }
                             else{
-                                res.redirect("/newUser");
+                                res.redirect("/userDashboard");
                             }
                     }
 
@@ -247,16 +248,32 @@ app.post('/login' , function( req, res){
         })
     })
 }); 
-
+app.get("/userDashboard", function(req, res){
+    const UserID=req.user._id;
+    console.log(UserID);
+    Ticket.find({userID:UserID}, function(err, foundTickets){
+        if(!err){
+            res.render('viewTickets', {tickets : foundTickets});
+         }
+    });
+});
 app.get("/adminDashboard" , function( req, res){
-     
-    res.send('admin dashboard'); 
+   
+    Ticket.find({}, function(err, result){
+        if(!err){
+            res.render('viewTickets', {tickets : result});
+         }
+    });
 });
 
 
 app.get("/ownerDashboard" , function( req, res){
-     
-    res.send('owner dashboard'); 
+ 
+    Ticket.find({}, function(err, result){
+        if(!err){
+            res.render('viewTickets', {tickets : result});
+         }
+    });
 });
 
 app.get("/newUser" , function( req, res){
@@ -328,7 +345,7 @@ app.get('/logout', function( req, res){
 });
 
 //loggedIn,  uOwner, 
-app.get('/ManageUsers',  function( req, res){
+app.get('/ManageUsers', loggedIn,  uOwner,  function( req, res){
 
     console.log(query +  " ==== " + null); 
     if( query === null || query === undefined || query === 'all'){
@@ -407,27 +424,46 @@ app.post('/filterUsers', function(req,res){
    
 })
 
+app.get("/createTicket" , function( req, response){
+
+    response.render('createTicket'); 
+})
+//Create ticket 
+app.post('/createTicket', function(req, response){
+    const UserID = req.user._id;
+    const ticketTitle = req.body.newTitle;
+    const ticketDes = req.body.newDes;
+    const ticketUrgency = req.body.newUrg;
+    //Created by
+    const ticketCreatedBy = req.body.newCreatedBy;
+    const ticketContact = req.body.newContact;
+    const ticketStatus= req.body.newStatus;
+
+    const newTicket = { title: ticketTitle ,  description : ticketDes, urgency: ticketUrgency, createdBy: ticketCreatedBy,userID: UserID, contact: ticketContact, status:ticketStatus}; 
+
+
+    if( ticketTitle != undefined && ticketDes != undefined){
+        Ticket.insertMany(newTicket); 
+
+        response.redirect("/userDashboard"); 
+    }
+    else {
+        console.log( " title: " + ticketTitle); 
+        console.log( " description : " + ticketDes); 
+    }
+});
+//Display Tickets
+app.get("/viewTickets", function(req, res){ 
+    Ticket.find({}, function(err, result){
+        if(!err){
+            res.render('viewTickets', {tickets : result});
+         }
+    });
+});
+
+
 app.listen(3000, function(){
     console.log("Server started on port 3000");
    
 });
 
-// npm install mongoose
-// errors 
-    // npm i mongoose express ejs 
-
-// next steps 
-// 1) import database schema + model (x)
-// 2) connect it to Mongodb Atlas 
-// 3) create the from/ticket 
-//      - route "/newTicket"
-//     - get the user input using ejs, body-parser 
-//     -  finish the route , we have the data now we just need to insert to db
-// 3.5 User Authentication  
-// 4) creat dashboard with ticket summary data <input name= "status"
-// == from users can submit , a dashboard one can see a list of submissions 
-//        4 a) query and find all the tickets made 
-//          b) display 
-//          c) query for specific tickets and find them and display them 
-// 
-// CRUD = > create , read , update , delete

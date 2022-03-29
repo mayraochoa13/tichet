@@ -38,13 +38,15 @@
       <td> <%= ticket.title %></td>
       <td> <%= ticket.description %></td>
       <td> <%= ticket.urgency %></td>
-      <td> <%= ticket.createdBy %></td>
+      <td> <%= ticket.createdBy %></td>      
       <td> <%= ticket.contact %></td>
       <td> <%= ticket.status %></td>
       <td><%= ticket.createdAt %></td>
       <% }) %>
     </tr>
   </table>
-      
+  <form action="/createTicket" method="get">
+    <button type="submit">Create a ticket</button>    
+  </form>    
 </body>
 </html>
