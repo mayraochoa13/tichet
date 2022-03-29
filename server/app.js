@@ -155,9 +155,18 @@ app.post('/register', function( req , res ){
                 if(!err){
                     console.log("user's role is assigned ! "); 
                 }
+
+                    // if role = user // send to user route 
+
+                    // if role = 
             });  // end updateOne()
+
+          
+                  // if role = user // send to user route 
+
+                    // if role = admin 
             // redirect to somewhere any body can access, the 'create form' will be in this route// or replaced by it in the future 
-            res.redirect("/newUser"); 
+            res.redirect("/newUser");  // role==user will always go to this route
         })
     }); 
 
@@ -203,27 +212,58 @@ app.post('/login' , function( req, res){
                         });  // end updateOne()
                     }
                     else {
-                        console.log('user has a role we can access later ')
+                            if(foundUser[0].role === 'owner' ){
+                                res.redirect("/ownerDashboard");
+                            }
+                            else if (foundUser[0].role === 'admin'){
+                               res.redirect("/adminDashboard");
+                            }
+                            else{
+                                res.redirect("/newUser");
+                            }
                     }
 
                 }); // end find()
                
             // redirect to somewhere any body can access, the 'create form' will be in this route// or replaced by it in the future 
-            res.redirect("/newUser"); 
+           // res.redirect("/newUser"); 
         })
     })
 }); 
 
+app.get("/adminDashboard" , function( req, res){
+     
+    res.send('admin dashboard'); 
+});
 
 
-app.get("/newUser" , function( require, response){
+app.get("/ownerDashboard" , function( req, res){
+     
+    res.send('owner dashboard'); 
+});
 
-    response.render('newUserForm'); 
+app.get("/newUser" , function( req, res){
+     // user needs all the tickets they have created 
+     //console.log(req.user); 
+     const UserID = req.user._id; 
+     const Username = req.user.username; 
+     
+    //  Ticket.find({user_id: UserId}, function(err, foundTickets){
+
+        // render that list of tickets 
+
+    //  }); 
+
+    res.render('newUserForm'); 
 })
 
 
-app.post("/newUser" , function( require, response){
-    
+app.post("/newUser" , function( req, res){
+     const UserID = req.user._id; 
+     const Username = req.user.username; 
+     console.log("post");
+     console.log(UserID);
+     console.log(Username);
     const userName = require.body.newName;
     const userAge = require.body.newAge;
     // console.log(userName[3])
@@ -234,7 +274,7 @@ app.post("/newUser" , function( require, response){
     if( userName != undefined && userAge != undefined){
         Sample.insertMany(newUser); 
 
-        response.redirect("/"); 
+        response.redirect("/newUser"); 
     }
     else {
         console.log( " name is : " + userName); 
@@ -254,7 +294,7 @@ app.post("/delete", function(require, response){
             if( !err){
 
                 console.log( " item deleted successfully ")
-                response.redirect("/"); 
+                res.redirect("/"); 
 
             }
             else {

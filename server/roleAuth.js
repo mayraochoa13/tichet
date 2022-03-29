@@ -1,21 +1,6 @@
 
 
 
-function authRole( role ){
-
- 
-    return( req, res, next)=>{
-
-       // console.log( req.role ); 
-        if( req.role !== role){
-
-            
-            res.status(401); 
-            return res.send("not allowed")
-        }
-        next()
-    }
-}; 
 
 // Middleware to check if user is logged in 
 function loggedIn(req, res, next) {
@@ -55,7 +40,6 @@ function uOwner (req, res, next){
 }; 
 
 module.exports={
-    authRole,
     loggedIn,
     uAdminOrOwner,
     uOwner
