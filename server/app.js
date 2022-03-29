@@ -431,6 +431,3 @@ app.listen(3000, function(){
 //          c) query for specific tickets and find them and display them 
 // 
 // CRUD = > create , read , update , delete 
-
-
-// if " cannot find x_dependency  " { npm i x_dependency }
