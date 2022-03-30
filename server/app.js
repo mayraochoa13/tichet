@@ -343,7 +343,7 @@ app.get('/logout', function( req, res){
 });
 
 //loggedIn,  uOwner, 
-app.get('/ManageUsers', loggedIn,  uOwner,  function( req, res){
+app.get('/ManageUsers',   function( req, res){
 
     console.log(query +  " ==== " + null); 
     if( query === null || query === undefined || query === 'all'){
