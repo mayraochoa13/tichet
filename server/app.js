@@ -76,8 +76,7 @@ passport.deserializeUser(User.deserializeUser());
 // let noFilter  = 0 ; 
 // let filterAge = 0 ; 
 let filterVal = 0;
-// activate filter /ManageUsers 
-let query = null; 
+
 
 
 // timestamp in seconds 
@@ -229,13 +228,13 @@ app.post('/login' , function( req, res){
                     }
                     else {
                             if(foundUser[0].role === 'owner' ){
-                                res.redirect("/ownerDashboard");
+                                res.redirect("/ownerDashboard/?role="+foundUser[0].role);
                             }
                             else if (foundUser[0].role === 'admin'){
-                               res.redirect("/adminDashboard");
+                               res.redirect("/adminDashboard/?role="+foundUser[0].role);
                             }
                             else{
-                                res.redirect("/userDashboard");
+                                res.redirect("/userDashboard/?role="+foundUser[0].role);
                             }
                     }
 
@@ -251,12 +250,12 @@ app.get("/userDashboard",loggedIn, function(req, res){
     //http://localhost:3000/userDashboard/?=filter=urgency
     const UserID=req.user._id;
     //const UserID=req.query.userID;
-   
+    const role = req.query.role; 
+    console.log('/userD role: '+role); 
     let filter = req.query.filter; 
-   // console.log(filter)
-
-    var strID = JSON.stringify(UserID);
    
+    
+   let strID = JSON.stringify(UserID);
     //console.log(strID.length );
     strID = strID.substr(1);
     strID = strID.substring(0, strID.length - 1);
@@ -267,24 +266,24 @@ app.get("/userDashboard",loggedIn, function(req, res){
     // console.log(filter );
     //userID
     if( filter === 'urgency'){
-       console.log('you clicked on urgency as a user ')
+       
         Ticket.find({userID:strID}).sort({urgency: 1}).exec(function( err, sortedTickets){
             if(!err){
-                res.render('viewTickets', {tickets : sortedTickets, user: strID});
+                res.render('viewTickets', {tickets : sortedTickets, user: strID, role: role});
             }
         })
     }
     else if( filter === 'date'){
         Ticket.find({userID:strID}).sort({created_at: 1}).exec(function( err, sortedTickets){
             if(!err){
-                res.render('viewTickets', {tickets : sortedTickets, user: UserID});
+                res.render('viewTickets', {tickets : sortedTickets, user: UserID, role: role});
             }
         }) 
     }
     else if( filter === 'status'){
         Ticket.find({userID:strID}).sort({status: -1}).exec(function( err, sortedTickets){
             if(!err){
-                res.render('viewTickets', {tickets : sortedTickets, user: UserID});
+                res.render('viewTickets', {tickets : sortedTickets, user: UserID, role: role});
             }
         }) 
     }
@@ -293,7 +292,7 @@ app.get("/userDashboard",loggedIn, function(req, res){
 
         Ticket.find({userID:strID}, function(err, foundTickets){
             if(!err){
-                res.render('viewTickets', {tickets : foundTickets , user: UserID});
+                res.render('viewTickets', {tickets : foundTickets , user: UserID, role: role});
         }
     });
     }
@@ -309,27 +308,28 @@ app.get("/adminDashboard", loggedIn , function( req, res){
 
 
 app.get("/ownerDashboard" ,loggedIn, uAdminOrOwner, function( req, res){
-    const filter = req.query.filter; 
+    const filter = req.query.filter;
+    const role = req.query.role;  
     const UserID =req.user._id;
     if( filter === 'urgency'){
        
         Ticket.find().sort({urgency: 1}).exec(function( err, sortedTickets){
             if(!err){
-                res.render('viewTickets', {tickets : sortedTickets, user: UserID});
+                res.render('viewTickets', {tickets : sortedTickets, user: UserID, role: role});
             }
         })
     }
     else if( filter === 'date'){
         Ticket.find().sort({created_at: 1}).exec(function( err, sortedTickets){
             if(!err){
-                res.render('viewTickets', {tickets : sortedTickets, user: UserID});
+                res.render('viewTickets', {tickets : sortedTickets, user: UserID,role: role});
             }
         }) 
     }
     else if( filter === 'status'){
         Ticket.find().sort({status: -1}).exec(function( err, sortedTickets){
             if(!err){
-                res.render('viewTickets', {tickets : sortedTickets, user: UserID});
+                res.render('viewTickets', {tickets : sortedTickets, user: UserID,role: role});
             }
         }) 
     }
@@ -339,7 +339,7 @@ app.get("/ownerDashboard" ,loggedIn, uAdminOrOwner, function( req, res){
     
     Ticket.find({}, function(err, result){
         if(!err){
-            res.render('viewTickets', {tickets : result, user: UserID});
+            res.render('viewTickets', {tickets : result, user: UserID, role: role});
          }
     });
     }
@@ -363,10 +363,10 @@ app.post('/filterTickets', function(req,res){
       
 
         if( foundUser[0].role === 'owner'){
-            res.redirect('/ownerDashboard/?filter='+filter); 
+            res.redirect('/ownerDashboard/?filter='+filter+'&role='+foundUser[0].role); 
         }
         else{
-            res.redirect('/userDashboard/?filter='+filter);
+            res.redirect('/userDashboard/?filter='+filter+'&role='+foundUser[0].role);
         }
 
     }
@@ -407,9 +407,9 @@ app.get('/logout', function( req, res){
 });
 
 //loggedIn,  uOwner, 
-app.get('/ManageUsers',   function( req, res){
-
-    if( query === null || query === undefined || query === 'all'){
+app.get('/ManageUsers',loggedIn,  uOwner, function( req, res){
+    const query = req.query.filter; 
+    if(  query === undefined || query === 'all'){
 
         
         User.find({}, function( err, foundUsers){
@@ -435,7 +435,7 @@ app.get('/ManageUsers',   function( req, res){
                         }
                     }); 
     }
-    //res.redirect('/ManageUsers'); 
+
 }); 
 
 //loggedIn,  uOwner, 
@@ -479,9 +479,9 @@ app.post('/ManageUsers',  function( req, res){
 
 
 app.post('/filterUsers', function(req,res){
-     query = req.body.filter; 
+    const UserFilter = req.body.filter; 
      
-     res.redirect('/ManageUsers'); 
+     res.redirect('/ManageUsers/?filter='+UserFilter); 
    
 })
 
