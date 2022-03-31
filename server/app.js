@@ -345,7 +345,6 @@ app.get('/logout', function( req, res){
 //loggedIn,  uOwner, 
 app.get('/ManageUsers',   function( req, res){
 
-    console.log(query +  " ==== " + null); 
     if( query === null || query === undefined || query === 'all'){
 
         
@@ -358,8 +357,8 @@ app.get('/ManageUsers',   function( req, res){
             //res.redirect('/ManageUsers');
     }
     else if(query === 'az'){
-        
-            User.find().sort({username:1}).exec(function( err, foundUserInRole){
+        // attempting to order users without case sensitivity, sort orders A first over a
+            User.find().collation({locale: "en"}).sort({username:1}).exec(function( err, foundUserInRole){
                 if( !err ){
                     res.render('manageUsers',{ ListOfUsers: foundUserInRole}); 
                 }
