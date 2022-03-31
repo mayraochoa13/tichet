@@ -251,42 +251,42 @@ app.get("/userDashboard", function(req, res){
     console.log(UserID);
     Ticket.find({userID:UserID}, function(err, foundTickets){
         if(!err){
-            res.render('viewTickets', {tickets : foundTickets});
+            res.render('viewTickets', {tickets : foundTickets , user: UserID});
          }
     });
 });
 app.get("/adminDashboard" , function( req, res){
-   
+    const UserID=req.user._id; // admin
     Ticket.find({}, function(err, result){
         if(!err){
-            res.render('viewTickets', {tickets : result});
+            res.render('viewTickets', {tickets : result , user: UserID});
          }
     });
 });
 
 
-app.get("/ownerDashboard" , function( req, res){
+app.get("/ownerDashboard" ,loggedIn, uAdminOrOwner, function( req, res){
     const filter = req.query.filter; 
-  
+    const UserID =req.user._id;
     if( filter === 'urgency'){
        
         Ticket.find().sort({urgency: 1}).exec(function( err, sortedTickets){
             if(!err){
-                res.render('viewTickets', {tickets : sortedTickets});
+                res.render('viewTickets', {tickets : sortedTickets, user: UserID});
             }
         })
     }
     else if( filter === 'date'){
         Ticket.find().sort({created_at: 1}).exec(function( err, sortedTickets){
             if(!err){
-                res.render('viewTickets', {tickets : sortedTickets});
+                res.render('viewTickets', {tickets : sortedTickets, user: UserID});
             }
         }) 
     }
     else if( filter === 'status'){
         Ticket.find().sort({status: -1}).exec(function( err, sortedTickets){
             if(!err){
-                res.render('viewTickets', {tickets : sortedTickets});
+                res.render('viewTickets', {tickets : sortedTickets, user: UserID});
             }
         }) 
     }
@@ -296,7 +296,7 @@ app.get("/ownerDashboard" , function( req, res){
     
     Ticket.find({}, function(err, result){
         if(!err){
-            res.render('viewTickets', {tickets : result});
+            res.render('viewTickets', {tickets : result, user: UserID});
          }
     });
     }
@@ -306,8 +306,13 @@ app.get("/ownerDashboard" , function( req, res){
 app.post('/filterTickets', function(req,res){
     //query = req.body.filter; 
     const filter = req.body.option; 
+    console.log(filter); 
+
+    // need to split the string 
+   // const User = req.body.userID; 
+
    
-    res.redirect('/ownerDashboard/?filter='+filter); 
+    //res.redirect('/ownerDashboard/?filter='+filter); 
   
 })
 
@@ -449,9 +454,10 @@ app.post('/createTicket', function(req, response){
 });
 //Display Tickets
 app.get("/viewTickets", function(req, res){ 
+    // need to know who is viewing the tickets to know their role 
     Ticket.find({}, function(err, result){
         if(!err){
-            res.render('viewTickets', {tickets : result});
+            res.render('viewTickets', {tickets : result });
          }
     });
 });
