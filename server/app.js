@@ -248,7 +248,7 @@ app.post('/login' , function( req, res){
 }); 
 app.get("/userDashboard", function(req, res){
     const UserID=req.user._id;
-    console.log(UserID);
+    
     Ticket.find({userID:UserID}, function(err, foundTickets){
         if(!err){
             res.render('viewTickets', {tickets : foundTickets , user: UserID});
@@ -305,13 +305,27 @@ app.get("/ownerDashboard" ,loggedIn, uAdminOrOwner, function( req, res){
 
 app.post('/filterTickets', function(req,res){
     //query = req.body.filter; 
-    const filter = req.body.option; 
-    console.log(filter); 
-
-    // need to split the string 
-   // const User = req.body.userID; 
-
+    const filterAndUser = req.body.option; 
    
+    var index = filterAndUser.indexOf("$");  // Gets the first index where a '$' 
+    var filter= filterAndUser.substr(0, index); // Gets the first part _id
+    var userID = filterAndUser.substr(index + 1);  // Gets role 
+
+   // search up the role of the user based on the id 
+   User.find({_id:userID}, function(err, foundUser){
+
+    if(!err){
+        if( foundUser[0].role === 'user'){
+            res.redirect('/userDashboard/?=filter='+filter); 
+        }
+        else{
+            res.redirect('/ownerDashboard/?filter='+filter);
+        }
+
+    }
+    else{ console.log(err) }
+
+   });
     //res.redirect('/ownerDashboard/?filter='+filter); 
   
 })
