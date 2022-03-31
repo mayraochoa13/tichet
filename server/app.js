@@ -162,7 +162,8 @@ app.post('/register', function( req , res ){
         // we are using 'local' strategy 
         passport.authenticate("local")(req, res, function(){
 
-           // console.log( req.user.role); 
+           console.log( req.body.first_name); 
+           console.log( req.body.last_name);
             // we authenticated them, so let them see the '/' which has the dashboard 
 
             // before we redirect need to assign them a role 
