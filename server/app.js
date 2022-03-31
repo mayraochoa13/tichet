@@ -162,22 +162,19 @@ app.post('/register', function( req , res ){
         // we are using 'local' strategy 
         passport.authenticate("local")(req, res, function(){
 
-           console.log( req.body.first_name); 
-           console.log( req.body.last_name);
             // we authenticated them, so let them see the '/' which has the dashboard 
 
             // before we redirect need to assign them a role 
-            const updatedRole = { role: 'user'}; // assigning default role = 'user'
+            const first_name= req.body.first_name; 
+            const last_name= req.body.last_name;
+            const updatedUserDetails = {FirstName: first_name, LastName: last_name, role: 'user'}; // assigning default role = 'user'
 
             // update user's new role 
-            User.updateOne({_id: req.user._id}, updatedRole, function(err){ // start updateOne()
+            User.updateOne({_id: req.user._id}, updatedUserDetails , function(err){ // start updateOne()
                 if(!err){
-                    console.log("user's role is assigned ! "); 
+                    console.log("user registered ! "); 
                 }
 
-                    // if role = user // send to user route 
-
-                    // if role = 
             });  // end updateOne()
 
           

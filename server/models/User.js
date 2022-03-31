@@ -9,7 +9,9 @@ const passportLocalMongoose = require('passport-local-mongoose');
 const userSchema= new mongoose.Schema( { 
     email:  String, 
     password: String, 
-    role: String
+    role: String, 
+    FirstName: String, 
+    LastName: String, 
 });
 
 // add passport local mongoose as a plug in for userSchema 
