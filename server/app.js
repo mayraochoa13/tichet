@@ -246,14 +246,45 @@ app.post('/login' , function( req, res){
         })
     })
 }); 
-app.get("/userDashboard", function(req, res){
-    const UserID=req.user._id;
+app.get("/userDashboard",loggedIn, function(req, res){
     
-    Ticket.find({userID:UserID}, function(err, foundTickets){
-        if(!err){
-            res.render('viewTickets', {tickets : foundTickets , user: UserID});
-         }
+    //http://localhost:3000/userDashboard/?=filter=urgency
+    const UserID=req.user._id;
+    const filter = req.query.filter; 
+     console.log(UserID ); 
+    // console.log(filter );
+    //userID
+    if( filter === 'urgency'){
+       console.log('you clicked on urgency as a user ')
+        Ticket.find({userID:UserID}).sort({urgency: 1}).exec(function( err, sortedTickets){
+            if(!err){
+                res.render('viewTickets', {tickets : sortedTickets, user: UserID});
+            }
+        })
+    }
+    else if( filter === 'date'){
+        Ticket.find({userID:UserID}).sort({created_at: 1}).exec(function( err, sortedTickets){
+            if(!err){
+                res.render('viewTickets', {tickets : sortedTickets, user: UserID});
+            }
+        }) 
+    }
+    else if( filter === 'status'){
+        Ticket.find({userID:UserID}).sort({status: -1}).exec(function( err, sortedTickets){
+            if(!err){
+                res.render('viewTickets', {tickets : sortedTickets, user: UserID});
+            }
+        }) 
+    }
+    
+    else{
+
+        Ticket.find({userID:UserID}, function(err, foundTickets){
+            if(!err){
+                res.render('viewTickets', {tickets : foundTickets , user: UserID});
+        }
     });
+    }
 });
 app.get("/adminDashboard" , function( req, res){
     const UserID=req.user._id; // admin
@@ -307,6 +338,7 @@ app.post('/filterTickets', function(req,res){
     //query = req.body.filter; 
     const filterAndUser = req.body.option; 
    
+
     var index = filterAndUser.indexOf("$");  // Gets the first index where a '$' 
     var filter= filterAndUser.substr(0, index); // Gets the first part _id
     var userID = filterAndUser.substr(index + 1);  // Gets role 
@@ -448,6 +480,7 @@ app.post('/createTicket', function(req, response){
     const ticketTitle = req.body.newTitle;
     const ticketDes = req.body.newDes;
     const ticketUrgency = req.body.newUrg;
+    console.log(ticketUrgency)
     //Created by
     const ticketCreatedBy = req.body.newCreatedBy;
     const ticketContact = req.body.newContact;
