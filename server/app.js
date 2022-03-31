@@ -524,6 +524,25 @@ app.get("/viewTickets", function(req, res){
     });
 });
 
+app.get('/TicketSummary', function(req, res){
+    const ticketId = req.query.ticketID; 
+    
+    Ticket.find({_id: ticketId}, function(err, foundTicket){
+        if(!err){
+            // render found ticket, summary page 
+            res.render('TicketSummary',{tickets : foundTicket}); 
+        }
+    })
+    
+}); 
+
+app.post('/TicketSummary', function(req, res){
+    const ticketId = req.body.summary; 
+
+    res.redirect('/TicketSummary/?ticketID='+ticketId); 
+
+}); 
+
 
 app.listen(3000, function(){
     console.log("Server started on port 3000");

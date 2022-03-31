@@ -1,6 +1,3 @@
-<!--
-    View Tickets
--->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,7 +19,7 @@
 
 </head>
 <body>
-  <h1>View Tickets</h1>
+  <h1>Ticket <Summary></Summary></h1>
   <table>
     <tr style="background-color:#DEDDDC;">
 
@@ -30,15 +27,15 @@
             <th>Title</th>
             <th>Description</th>
               <th>
-                  <button name="option" value="urgency$<%=user%>"> Urgency</button>
+                Urgency
               </th>
             <th>Created by</th>
             <th>Contact</th>
             <th>
-              <button name="option" value="status$<%=user%>"> Status</button>
+             Status
             </th>
             <th>
-                <button name="option" value="date$<%=user%>"> Date</button>
+               Date
            </th>
          
      </form> 
@@ -53,28 +50,10 @@
       <td> <%= ticket.status %></td>
       <td><%= ticket.createdAt %></td>
 
-          <% if(role === 'owner'){ %>
-          <td>
-            <form action="/TicketSummary" method="post">
-              <button type="submit" name="summary" value="<%= ticket._id %>"> -> </button>
-            </form>
-          </td>
-          <% } %> 
       <% }) %>
 
     </tr>
   </table>
 
-  <% if(role === 'user'){ %>
-  <form action="/createTicket" method="get">
-    <button type="submit">Create a ticket</button>    
-  </form>  
-  <% } %>  
-
-  <% if(role === 'owner'){ %>
-    <form action="/ManageUsers" method="get">
-      <button type="submit">Manage Users </button>    
-    </form>  
-    <% } %> 
 </body>
 </html>
