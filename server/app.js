@@ -250,27 +250,39 @@ app.get("/userDashboard",loggedIn, function(req, res){
     
     //http://localhost:3000/userDashboard/?=filter=urgency
     const UserID=req.user._id;
-    const filter = req.query.filter; 
-     console.log(UserID ); 
+    //const UserID=req.query.userID;
+   
+    let filter = req.query.filter; 
+   // console.log(filter)
+
+    var strID = JSON.stringify(UserID);
+   
+    //console.log(strID.length );
+    strID = strID.substr(1);
+    strID = strID.substring(0, strID.length - 1);
+    //console.log(strID.length );
+
+    
+     //console.log("this is a string: ", strID);
     // console.log(filter );
     //userID
     if( filter === 'urgency'){
        console.log('you clicked on urgency as a user ')
-        Ticket.find({userID:UserID}).sort({urgency: 1}).exec(function( err, sortedTickets){
+        Ticket.find({userID:strID}).sort({urgency: 1}).exec(function( err, sortedTickets){
             if(!err){
-                res.render('viewTickets', {tickets : sortedTickets, user: UserID});
+                res.render('viewTickets', {tickets : sortedTickets, user: strID});
             }
         })
     }
     else if( filter === 'date'){
-        Ticket.find({userID:UserID}).sort({created_at: 1}).exec(function( err, sortedTickets){
+        Ticket.find({userID:strID}).sort({created_at: 1}).exec(function( err, sortedTickets){
             if(!err){
                 res.render('viewTickets', {tickets : sortedTickets, user: UserID});
             }
         }) 
     }
     else if( filter === 'status'){
-        Ticket.find({userID:UserID}).sort({status: -1}).exec(function( err, sortedTickets){
+        Ticket.find({userID:strID}).sort({status: -1}).exec(function( err, sortedTickets){
             if(!err){
                 res.render('viewTickets', {tickets : sortedTickets, user: UserID});
             }
@@ -279,14 +291,14 @@ app.get("/userDashboard",loggedIn, function(req, res){
     
     else{
 
-        Ticket.find({userID:UserID}, function(err, foundTickets){
+        Ticket.find({userID:strID}, function(err, foundTickets){
             if(!err){
                 res.render('viewTickets', {tickets : foundTickets , user: UserID});
         }
     });
     }
 });
-app.get("/adminDashboard" , function( req, res){
+app.get("/adminDashboard", loggedIn , function( req, res){
     const UserID=req.user._id; // admin
     Ticket.find({}, function(err, result){
         if(!err){
@@ -342,16 +354,19 @@ app.post('/filterTickets', function(req,res){
     var index = filterAndUser.indexOf("$");  // Gets the first index where a '$' 
     var filter= filterAndUser.substr(0, index); // Gets the first part _id
     var userID = filterAndUser.substr(index + 1);  // Gets role 
+ 
 
    // search up the role of the user based on the id 
    User.find({_id:userID}, function(err, foundUser){
 
     if(!err){
-        if( foundUser[0].role === 'user'){
-            res.redirect('/userDashboard/?=filter='+filter); 
+      
+
+        if( foundUser[0].role === 'owner'){
+            res.redirect('/ownerDashboard/?filter='+filter); 
         }
         else{
-            res.redirect('/ownerDashboard/?filter='+filter);
+            res.redirect('/userDashboard/?filter='+filter);
         }
 
     }
