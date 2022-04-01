@@ -34,12 +34,17 @@
               </th>
             <th>Created by</th>
             <th>Contact</th>
+
             <th>
               <button name="option" value="status$<%=user%>"> Status</button>
             </th>
+
             <th>
-                <button name="option" value="date$<%=user%>"> Date</button>
-           </th>
+              <button name="option" value="date$<%=user%>"> Date</button>
+            </th>
+
+
+           
          
      </form> 
     </tr>
@@ -52,8 +57,9 @@
       <td> <%= ticket.contact %></td>
       <td> <%= ticket.status %></td>
       <td><%= ticket.createdAt %></td>
-
+     
           <% if(role === 'owner'){ %>
+
           <td>
             <form action="/TicketSummary" method="post">
               <button type="submit" name="summary" value="<%= ticket._id %>$<%= role %>"> -> </button>
