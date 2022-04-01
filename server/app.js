@@ -526,21 +526,42 @@ app.get("/viewTickets", function(req, res){
 
 app.get('/TicketSummary', function(req, res){
     const ticketId = req.query.ticketID; 
-    
+    const role = req.query.role; 
+    console.log('ticket summary GET')
     Ticket.find({_id: ticketId}, function(err, foundTicket){
         if(!err){
             // render found ticket, summary page 
-            res.render('TicketSummary',{tickets : foundTicket}); 
+            res.render('TicketSummary',{tickets : foundTicket , role: role}); 
         }
     })
     
 }); 
 
 app.post('/TicketSummary', function(req, res){
-    const ticketId = req.body.summary; 
+    const ticketIdAndRole = req.body.summary; 
+    console.log('ticket summary Post')
+    // need to split the string to get ticketID and role 
+    var index = ticketIdAndRole.indexOf("$");  // Gets the first index where a '$' 
+    var ticketId= ticketIdAndRole.substr(0, index); // Gets the first part _id
+    var role = ticketIdAndRole.substr(index + 1);  // Gets role 
+    res.redirect('/TicketSummary/?ticketID='+ticketId+'&role='+role); 
 
-    res.redirect('/TicketSummary/?ticketID='+ticketId); 
+}); 
 
+app.get('/return',   function(req, res){
+    const role = req.query.role; 
+  
+    if( role === 'owner'){
+        res.redirect('/ownerDashboard/?role='+role); 
+    }else { // else they are an admin 
+        res.redirect('/ownerDashboard/?role='+role); 
+    }
+}); 
+
+app.post('/return',   function(req, res){
+    
+        res.redirect('/return/?role='+req.body.returnBtn); 
+   
 }); 
 
 

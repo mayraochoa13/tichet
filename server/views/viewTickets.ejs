@@ -56,7 +56,7 @@
           <% if(role === 'owner'){ %>
           <td>
             <form action="/TicketSummary" method="post">
-              <button type="submit" name="summary" value="<%= ticket._id %>"> -> </button>
+              <button type="submit" name="summary" value="<%= ticket._id %>$<%= role %>"> -> </button>
             </form>
           </td>
           <% } %> 
