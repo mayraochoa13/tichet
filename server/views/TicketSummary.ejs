@@ -19,7 +19,7 @@
 
 </head>
 <body>
-  <h1>Ticket <Summary></Summary></h1>
+  <h1>Ticket Summary</h1>
   <table>
     <tr style="background-color:#DEDDDC;">
 
@@ -47,13 +47,34 @@
       <td> <%= ticket.urgency.substr(1) %></td>
       <td> <%= ticket.createdBy %></td>      
       <td> <%= ticket.contact %></td>
-      <td> <%= ticket.status %></td>
+
+
+<!-- allow staff(owner / admin) to make changes to the ticket status  -->
+        <td>  
+            <form  action="/updateTicket" method="post">
+                                <select class="selectpicker" data-style="btn-info" name="statusUpdate" >
+                                    
+                                    <option value="" disabled selected hidden><%=ticket.status %></option>
+                                        <optgroup label="Update Status"></optgroup>
+                                        <option name="complete" value="<%= ticket._id %>$<%=role %>$complete">complete</option>
+                                        <option name="pending" value="<%= ticket._id %>$<%=role %>$pending">pending</option>
+                                       
+                                        <optgroup label="DELETE"></optgroup>
+                                        <option name="DELETE" value="<%= ticket._id %>$<%=role %>$DELETE">DELETE</option>
+                                    
+                                </select>
+                                <input type="submit" value="update"/> 
+            </form>
+
+        </td>
+      <!-- <td> <%= ticket.status %></td> -->
       <td><%= ticket.createdAt %></td>
 
       <% }) %>
 
     </tr>
   </table>
+
 
 
 

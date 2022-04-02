@@ -28,7 +28,7 @@
 
      <form action="/filterTickets" method="post">
             <th>Title</th>
-            <th>Description</th>
+            <!-- <th>Description</th> -->
               <th>
                   <button name="option" value="urgency$<%=user%>"> Urgency</button>
               </th>
@@ -51,7 +51,7 @@
     <% tickets.forEach(function(ticket) {  %>
     <tr>
       <td> <%= ticket.title %></td>
-      <td> <%= ticket.description %></td>
+      <!-- <td> <%= ticket.description %></td> -->
       <td> <%= ticket.urgency.substr(1) %></td>
       <td> <%= ticket.createdBy %></td>      
       <td> <%= ticket.contact %></td>

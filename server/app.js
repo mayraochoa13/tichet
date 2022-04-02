@@ -379,25 +379,6 @@ app.post('/filterTickets', function(req,res){
 
  
 
-app.post("/delete", function(require, response){
-
-
-        const UserToDelete = require.body.deleteUser; 
-
-        console.log( " delete this user: " + UserToDelete);
-        
-        Sample.deleteOne( {_id: UserToDelete}, function(err){
-            if( !err){
-
-                console.log( " item deleted successfully ")
-                res.redirect("/"); 
-
-            }
-            else {
-                console.log( err); 
-            }
-        })
-}); 
 
 app.get('/logout', function( req, res){
     req.logout();
@@ -527,7 +508,7 @@ app.get("/viewTickets", function(req, res){
 app.get('/TicketSummary', function(req, res){
     const ticketId = req.query.ticketID; 
     const role = req.query.role; 
-    console.log('ticket summary GET')
+
     Ticket.find({_id: ticketId}, function(err, foundTicket){
         if(!err){
             // render found ticket, summary page 
@@ -539,7 +520,7 @@ app.get('/TicketSummary', function(req, res){
 
 app.post('/TicketSummary', function(req, res){
     const ticketIdAndRole = req.body.summary; 
-    console.log('ticket summary Post')
+  
     // need to split the string to get ticketID and role 
     var index = ticketIdAndRole.indexOf("$");  // Gets the first index where a '$' 
     var ticketId= ticketIdAndRole.substr(0, index); // Gets the first part _id
@@ -563,6 +544,63 @@ app.post('/return',   function(req, res){
         res.redirect('/return/?role='+req.body.returnBtn); 
    
 }); 
+
+// update ticket status 
+app.post('/updateTicket', function( req, res){
+
+    let ticketIdAndStatus = req.body.statusUpdate; 
+
+    let substringValues= ticketIdAndStatus.split('$'); 
+  
+    // console.log(substringValues[0]);// ticket id 
+    // console.log(substringValues[1]);// role of the user requesting to update 
+    // console.log(substringValues[2]);// what value the ticket status needs to be updated too 
+    res.redirect('/updateTicket/?ticketID='+substringValues[0]+'&role='+substringValues[1]+'&status='+substringValues[2]); 
+}); 
+
+app.get('/updateTicket', function( req, res){
+ 
+        const ticketID= req.query.ticketID;
+        const Role= req.query.role;
+        const NewStatus = req.query.status; 
+
+        if( NewStatus != 'DELETE'){
+         
+        const updatedStatus = { status: NewStatus}
+                Ticket.updateOne({_id: ticketID}, updatedStatus, function(err){
+                    if(!err){
+                        console.log("Ticket Status updated !");
+                    }
+                    else{ console.log(err)}
+                }); 
+                    // render Ticket Summary
+                Ticket.find({_id: ticketID}, function(err, foundTicket){
+                    if(!err){
+               
+                      res.render('TicketSummary',{tickets : foundTicket , role:Role});
+                        
+                    }
+                });
+
+        }
+        else {
+            // delete ticket and render to dashboard and not ticketSummary 
+            Ticket.deleteOne({_id: ticketID}, function(err){
+                if( !err){
+                            console.log( " ticket deleted successfully ")
+                           // res.redirect("/"); 
+            
+                        }
+                        else {
+                            console.log( err); 
+                        }
+            })
+        }
+
+       
+
+}); 
+
 
 
 app.listen(3000, function(){
