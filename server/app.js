@@ -588,7 +588,8 @@ app.get('/updateTicket', function( req, res){
             Ticket.deleteOne({_id: ticketID}, function(err){
                 if( !err){
                             console.log( " ticket deleted successfully ")
-                           // res.redirect("/"); 
+                           // res.render('TicketSummary',{tickets : foundTicket , role:Role});
+                           res.redirect('/ownerDashboard/?role='+Role); 
             
                         }
                         else {
