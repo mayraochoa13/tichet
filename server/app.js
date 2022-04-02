@@ -176,12 +176,9 @@ app.post('/register', function( req , res ){
 
             });  // end updateOne()
 
-          
-                  // if role = user // send to user route 
-
-                    // if role = admin 
+            let newRole = 'user'
             // redirect to somewhere any body can access, the 'create form' will be in this route// or replaced by it in the future 
-            res.redirect("/userDashboard");  // role==user will always go to this route
+            res.redirect("/userDashboard/?role="+newRole);  // role==user will always go to this route
         })
     }); 
 
@@ -436,6 +433,11 @@ app.post('/ManageUsers',  function( req, res){
         User.deleteOne({_id: userID}, function(err){
             if( !err){
                 console.log(" successfully deleted user "); 
+                Ticket.deleteMany({userID: userID}, function(err){
+                    if( !err){
+                        console.log(" successfully deleted user's tickets "); 
+                    }
+                })
             }
             res.redirect('/ManageUsers'); 
         }); 
@@ -480,20 +482,19 @@ app.post('/createTicket', function(req, response){
     //Created by
     const ticketCreatedBy = req.body.newCreatedBy;
     const ticketContact = req.body.newContact;
-    const ticketStatus= req.body.newStatus;
+    // when a user creates a ticket they themselves can add a status
+   // const ticketStatus= req.body.newStatus;
+   const ticketStatus='submitted'; 
 
     const newTicket = { title: ticketTitle ,  description : ticketDes, urgency: ticketUrgency, createdBy: ticketCreatedBy,userID: UserID, contact: ticketContact, status:ticketStatus}; 
 
 
-    if( ticketTitle != undefined && ticketDes != undefined){
         Ticket.insertMany(newTicket); 
+        // insert ticket now redirect to dashboard 
+        const CurrentRole= 'user'
 
-        response.redirect("/userDashboard"); 
-    }
-    else {
-        console.log( " title: " + ticketTitle); 
-        console.log( " description : " + ticketDes); 
-    }
+        response.redirect("/userDashboard/?role="+CurrentRole); 
+  
 });
 //Display Tickets
 app.get("/viewTickets", function(req, res){ 
