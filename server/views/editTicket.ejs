@@ -48,6 +48,7 @@
     <tr>
       <td> 
           <%= ticket.title %>
+          <br>
             <button type="submit" name="title" value="<%= ticket._id %>$title"> edit </button>
     </td>
     <td>
@@ -64,11 +65,13 @@
     
     <td> 
           <%= ticket.createdBy %>
+          <br>
           <button type="submit" name="createdBy" value="<%= ticket._id %>$createdBy"> edit </button>
     </td> 
 
     <td> 
         <%= ticket.contact %>
+        <br>
         <button type="submit" name="contact"  value="<%= ticket._id %>$contact"> edit </button>
     </td>
       <td> <%= ticket.status %></td>
@@ -81,41 +84,20 @@
   </table>
 
 
-    <!-- <% tickets.forEach(function(ticket) {  %>
-       
-     <form action="/editTicket" method="post">
-        <h4>Title</h4>
-        <input type="text" name="title" placeholder="<%= ticket.title %>" />
-
-        <h4>Description</h4>
-        <input type="text" name="description" placeholder="<%= ticket.description %>" />
- 
-      <h3> <%= ticket.urgency.substr(1) %></h3> -->
-
-        <!-- <h4>Created By</h4>
-        <input type="text" name="createdBy" placeholder="<%= ticket.createdBy %>" />
-
-        <h4>Contact</h4>
-        <input type="text" name="contact" placeholder="<%= ticket.contact %>" />
-
-        <br>
-        <br>
-        <button type="submit" name="update">save</button>
-
-    </form>
-        <% }) %>  -->
         <br>
         <br>
  <% tickets.forEach(function(ticket) {  %>
 <!-- <form action="/editTicketSections/?ticketID=<%= ticket._id %>" method="post"> -->
         <% if( editOption === 'title'){ %>
-        <form action="/updateTitle/?ticketID=<%= ticket._id %>" method="post">
-            <input type="text" name="UptdTitle"  placeholder="<%= ticket.title %>">
+        <label action="/updateTitle/?ticketID=<%= ticket._id %>" method="post">
+           <label for="title"> Title:  </label> 
+           <input type="text" name="UptdTitle"  placeholder="<%= ticket.title %>"> 
             <button type="submit" name="saveChanges" > update </button>
         </form>
 
         <%  }  else if( editOption ==='description'){ %>
             <form action="/updateDescription/?ticketID=<%= ticket._id %>" method="post">
+              <label for="description"> Description:  </label> 
                 <input type="text" name="UptdDescription" placeholder="<%= ticket.description %>">
                 <button type="submit" name="saveChanges" > update </button>
             </form>
@@ -123,6 +105,7 @@
          <%  } else if( editOption ==='createdBy'){ %>
 
             <form action="/updateCreatedBy/?ticketID=<%= ticket._id %>" method="post">
+              <label for="createdBy"> Created By:  </label> 
                 <input type="text" name="UptdCreatedBy" placeholder="<%= ticket.createdBy %>">
                 <button type="submit" name="saveChanges" > update </button>
             </form>
@@ -130,6 +113,7 @@
         <%  }  else if( editOption ==='contact'){ %>
 
             <form action="/updateContact/?ticketID=<%= ticket._id %>" method="post">
+              <label for="contact"> Contact:  </label> 
                 <input type="text" name="UptdContact" placeholder="<%= ticket.contact %>">
                 <button type="submit" name="saveChanges" > update </button>
             </form>
