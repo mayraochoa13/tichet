@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Edit Tickets</title>
+   <style>
+    *{
+        text-align: center;
+    }
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: center;
+      padding: 8px;
+    }
+
+    </style>
+
+</head>
+<body>
+  <h1>Edit Ticket</h1>
+
+
+  
+  <table>
+    <tr style="background-color:#DEDDDC;">
+
+    
+            <th>Title</th>
+            <th>Description</th>
+              <th>
+                Urgency
+              </th>
+            <th>Created by</th>
+            <th>Contact</th>
+            <th>
+             Status
+            </th>
+            <th>
+               Date
+           </th>
+         
+  
+    </tr>
+    <% tickets.forEach(function(ticket) {  %>
+        <form action="/editMenu" method="post">
+    <tr>
+      <td> 
+          <%= ticket.title %>
+            <button type="submit" name="title" value="<%= ticket._id %>$title"> edit </button>
+    </td>
+    <td>
+           <%= ticket.description %>
+           <br>
+           <button type="submit" name="description" value="<%= ticket._id %>$description"> edit </button>
+    </td>
+    
+    <td> 
+          <%= ticket.urgency.substr(1) %>
+        
+        
+    </td>
+    
+    <td> 
+          <%= ticket.createdBy %>
+          <button type="submit" name="createdBy" value="<%= ticket._id %>$createdBy"> edit </button>
+    </td> 
+
+    <td> 
+        <%= ticket.contact %>
+        <button type="submit" name="contact"  value="<%= ticket._id %>$contact"> edit </button>
+    </td>
+      <td> <%= ticket.status %></td>
+      <td><%= ticket.createdAt %></td>
+
+      <% }) %>
+
+    </tr>
+        </form>
+  </table>
+
+
+    <!-- <% tickets.forEach(function(ticket) {  %>
+       
+     <form action="/editTicket" method="post">
+        <h4>Title</h4>
+        <input type="text" name="title" placeholder="<%= ticket.title %>" />
+
+        <h4>Description</h4>
+        <input type="text" name="description" placeholder="<%= ticket.description %>" />
+ 
+      <h3> <%= ticket.urgency.substr(1) %></h3> -->
+
+        <!-- <h4>Created By</h4>
+        <input type="text" name="createdBy" placeholder="<%= ticket.createdBy %>" />
+
+        <h4>Contact</h4>
+        <input type="text" name="contact" placeholder="<%= ticket.contact %>" />
+
+        <br>
+        <br>
+        <button type="submit" name="update">save</button>
+
+    </form>
+        <% }) %>  -->
+        <br>
+        <br>
+ <% tickets.forEach(function(ticket) {  %>
+<!-- <form action="/editTicketSections/?ticketID=<%= ticket._id %>" method="post"> -->
+        <% if( editOption === 'title'){ %>
+        <form action="/updateTitle/?ticketID=<%= ticket._id %>" method="post">
+            <input type="text" name="UptdTitle"  placeholder="<%= ticket.title %>">
+            <button type="submit" name="saveChanges" > update </button>
+        </form>
+
+        <%  }  else if( editOption ==='description'){ %>
+            <input type="text" name="UptdDescription" placeholder="<%= ticket.description %>">
+
+         <%  } else if( editOption ==='createdBy'){ %>
+            <input type="text" name="UptdCreatedBy" placeholder="<%= ticket.createdBy %>">
+
+        <%  }  else if( editOption ==='contact'){ %>
+            <input type="text" name="UptdContact" placeholder="<%= ticket.contact %>">
+            <%  }    %>
+
+            <!-- <button type="submit" name="saveChanges" > save </button> -->
+ <% }) %> 
+
+<!-- </form> -->
+    <br>
+    <br>
+    <br>
+  <form action="/return" method="post">
+      <button type="submit" name="returnBtn" value="<%=role%>"> <-back to dashboard</button>
+  </form>
+
+</body>
+</html>

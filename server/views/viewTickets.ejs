@@ -57,15 +57,22 @@
       <td> <%= ticket.contact %></td>
       <td> <%= ticket.status %></td>
       <td><%= ticket.createdAt %></td>
-     
-          <% if(role === 'owner'){ %>
+      <% if(role === 'user'){ %>
+            <td>
+              <form action="/editTicket" method="post">
+                <button type="submit" name="IDandROLE" value="<%= ticket._id %>$<%= role %>"> edit </button>
+              </form>
+            </td>
 
-          <td>
-            <form action="/TicketSummary" method="post">
-              <button type="submit" name="summary" value="<%= ticket._id %>$<%= role %>"> -> </button>
-            </form>
-          </td>
-          <% } %> 
+       <% } else { %> 
+        <td>
+          <form action="/TicketSummary" method="post">
+            <button type="submit" name="summary" value="<%= ticket._id %>$<%= role %>"> -> </button>
+          </form>
+        </td> 
+        
+        <% } %>
+    
       <% }) %>
 
     </tr>

@@ -532,10 +532,10 @@ app.post('/TicketSummary', function(req, res){
 
 app.get('/return',   function(req, res){
     const role = req.query.role; 
-  
-    if( role === 'owner'){
-        res.redirect('/ownerDashboard/?role='+role); 
-    }else { // else they are an admin 
+
+      if( role === 'user'){
+        res.redirect('/userDashboard/?role='+role); 
+    }else { // else they are an admin or owner either way will go to same route 
         res.redirect('/ownerDashboard/?role='+role); 
     }
 }); 
@@ -603,7 +603,92 @@ app.get('/updateTicket', function( req, res){
 
 }); 
 
+app.post('/editTicket' ,function(req, res){
+    let ticketIdAndRole = req.body.IDandROLE; 
+    var index = ticketIdAndRole.indexOf("$");  // Gets the first index where a '$' 
+    var ticketId= ticketIdAndRole.substr(0, index); // Gets the first part _id
+    var role = ticketIdAndRole.substr(index + 1); 
 
+    res.redirect('/editTicket/?ticketID='+ticketId+'&role='+role); 
+    
+}); 
+
+app.get('/editTicket' ,function(req, res){
+ 
+    var ticketId= req.query.ticketID
+    var role = req.query.role; 
+    var edit = req.query.menuOption; 
+
+   
+    
+   Ticket.find({_id: ticketId}, function(err, foundTicket){
+        try{
+            res.render('editTicket', {tickets : foundTicket, role : role , editOption: edit}); 
+        }
+        catch(err){
+            console.log(err);
+        }
+          
+      
+   });
+}); 
+
+app.post('/editMenu', function(req,res){
+
+    let EditMenuOptions = []; 
+    EditMenuOptions.push(req.body.title); 
+    EditMenuOptions.push(req.body.description); 
+    EditMenuOptions.push(req.body.createdBy); 
+    EditMenuOptions.push(req.body.contact); 
+   
+    for( var i = 0; i < EditMenuOptions.length ; i++){
+        if(EditMenuOptions[i] != undefined){
+             
+           // split string into 2 parts 
+           var index = EditMenuOptions[i].indexOf("$");
+           var ticketId= EditMenuOptions[i].substr(0, index); // Gets the first part _id
+           var option = EditMenuOptions[i].substr(index + 1);  // Gets menu option  
+           res.redirect('/editTicket/?ticketID='+ticketId+'&role=user'+'&menuOption='+option); 
+            //res.redirect('/editTicket/?menuOption='+EditMenuOptions[i]); 
+        }
+    }
+    
+  
+    
+}); 
+
+// app.post('/editTicketSections', function(req, res){
+//     console.log(req.query.ticketID); 
+//     console.log(req.body.title); 
+//     console.log('------------------')
+//     console.log(req.body.UptdTitle); 
+//     console.log(req.body.UptdDescription); 
+//     console.log(req.body.UptdCreatedBy); 
+//     console.log(req.body.UptdContact); 
+// }); 
+
+         
+// const updatedStatus = { status: NewStatus}
+// Ticket.updateOne({_id: ticketID}, updatedStatus, function(err){
+//     if(!err){
+//         console.log("Ticket Status updated !");
+//     }
+//     else{ console.log(err)}
+// }); 
+app.post('/updateTitle', function(req, res){
+    const ticketID = req.query.ticketID; 
+    const NewTitle = req.body.UptdTitle;
+    
+    let update = { title: NewTitle }; 
+    Ticket.updateOne({_id: ticketID}, update,function(err){
+        if(!err){
+            console.log('title updated successfully'); 
+
+        }
+    }); 
+    // re render edit ticket page but with updated title value and closed edit menu options 
+    res.redirect('/editTicket/?ticketID='+ticketID+'&role=user'); 
+}); 
 
 app.listen(3000, function(){
     console.log("Server started on port 3000");
