@@ -690,6 +690,51 @@ app.post('/updateTitle', function(req, res){
     res.redirect('/editTicket/?ticketID='+ticketID+'&role=user'); 
 }); 
 
+app.post('/updateDescription', function(req, res){
+    const ticketID = req.query.ticketID; 
+    const NewDescription = req.body.UptdDescription;
+    
+    let update = { description: NewDescription }; 
+    Ticket.updateOne({_id: ticketID}, update,function(err){
+        if(!err){
+            console.log('title updated successfully'); 
+
+        }
+    }); 
+    // re render edit ticket page but with updated title value and closed edit menu options 
+    res.redirect('/editTicket/?ticketID='+ticketID+'&role=user'); 
+});
+
+app.post('/updateCreatedBy', function(req, res){
+    const ticketID = req.query.ticketID; 
+    const NewCreatedBy = req.body.UptdCreatedBy;
+    
+    let update = { createdBy: NewCreatedBy }; 
+    Ticket.updateOne({_id: ticketID}, update,function(err){
+        if(!err){
+            console.log('title updated successfully'); 
+
+        }
+    }); 
+    // re render edit ticket page but with updated title value and closed edit menu options 
+    res.redirect('/editTicket/?ticketID='+ticketID+'&role=user'); 
+});
+
+app.post('/updateContact', function(req, res){
+    const ticketID = req.query.ticketID; 
+    const NewContact = req.body.UptdContact;
+    
+    let update = { contact: NewContact }; 
+    Ticket.updateOne({_id: ticketID}, update,function(err){
+        if(!err){
+            console.log('title updated successfully'); 
+
+        }
+    }); 
+    // re render edit ticket page but with updated title value and closed edit menu options 
+    res.redirect('/editTicket/?ticketID='+ticketID+'&role=user'); 
+});
+
 app.listen(3000, function(){
     console.log("Server started on port 3000");
    

@@ -115,13 +115,24 @@
         </form>
 
         <%  }  else if( editOption ==='description'){ %>
-            <input type="text" name="UptdDescription" placeholder="<%= ticket.description %>">
+            <form action="/updateDescription/?ticketID=<%= ticket._id %>" method="post">
+                <input type="text" name="UptdDescription" placeholder="<%= ticket.description %>">
+                <button type="submit" name="saveChanges" > update </button>
+            </form>
 
          <%  } else if( editOption ==='createdBy'){ %>
-            <input type="text" name="UptdCreatedBy" placeholder="<%= ticket.createdBy %>">
+
+            <form action="/updateCreatedBy/?ticketID=<%= ticket._id %>" method="post">
+                <input type="text" name="UptdCreatedBy" placeholder="<%= ticket.createdBy %>">
+                <button type="submit" name="saveChanges" > update </button>
+            </form>
 
         <%  }  else if( editOption ==='contact'){ %>
-            <input type="text" name="UptdContact" placeholder="<%= ticket.contact %>">
+
+            <form action="/updateContact/?ticketID=<%= ticket._id %>" method="post">
+                <input type="text" name="UptdContact" placeholder="<%= ticket.contact %>">
+                <button type="submit" name="saveChanges" > update </button>
+            </form>
             <%  }    %>
 
             <!-- <button type="submit" name="saveChanges" > save </button> -->
