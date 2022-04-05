@@ -657,24 +657,7 @@ app.post('/editMenu', function(req,res){
     
 }); 
 
-// app.post('/editTicketSections', function(req, res){
-//     console.log(req.query.ticketID); 
-//     console.log(req.body.title); 
-//     console.log('------------------')
-//     console.log(req.body.UptdTitle); 
-//     console.log(req.body.UptdDescription); 
-//     console.log(req.body.UptdCreatedBy); 
-//     console.log(req.body.UptdContact); 
-// }); 
 
-         
-// const updatedStatus = { status: NewStatus}
-// Ticket.updateOne({_id: ticketID}, updatedStatus, function(err){
-//     if(!err){
-//         console.log("Ticket Status updated !");
-//     }
-//     else{ console.log(err)}
-// }); 
 app.post('/updateTitle', function(req, res){
     const ticketID = req.query.ticketID; 
     const NewTitle = req.body.UptdTitle;
@@ -697,7 +680,24 @@ app.post('/updateDescription', function(req, res){
     let update = { description: NewDescription }; 
     Ticket.updateOne({_id: ticketID}, update,function(err){
         if(!err){
-            console.log('title updated successfully'); 
+            console.log('description updated successfully'); 
+
+        }
+    }); 
+    // re render edit ticket page but with updated title value and closed edit menu options 
+    res.redirect('/editTicket/?ticketID='+ticketID+'&role=user'); 
+});
+
+app.post('/updateUrgency', function(req, res){
+    const ticketID = req.query.ticketID; 
+    //req.body.urgencyUpdate;
+
+    // console.log(req.body.urgencyUpdate)
+    
+    let update = { urgency: req.body.urgencyUpdate }; 
+    Ticket.updateOne({_id: ticketID}, update,function(err){
+        if(!err){
+            console.log('urgency updated successfully'); 
 
         }
     }); 
@@ -712,7 +712,7 @@ app.post('/updateCreatedBy', function(req, res){
     let update = { createdBy: NewCreatedBy }; 
     Ticket.updateOne({_id: ticketID}, update,function(err){
         if(!err){
-            console.log('title updated successfully'); 
+            console.log('created by updated successfully'); 
 
         }
     }); 
@@ -727,13 +727,26 @@ app.post('/updateContact', function(req, res){
     let update = { contact: NewContact }; 
     Ticket.updateOne({_id: ticketID}, update,function(err){
         if(!err){
-            console.log('title updated successfully'); 
+            console.log('contact updated successfully'); 
 
         }
     }); 
     // re render edit ticket page but with updated title value and closed edit menu options 
     res.redirect('/editTicket/?ticketID='+ticketID+'&role=user'); 
 });
+
+app.post('/updateDelete', function(req, res){
+    const ticketID = req.body.deleteBTN; 
+
+    Ticket.deleteOne({_id:ticketID}, function(err){
+        if(!err){
+            console.log('user successfully deleted ticket'); 
+
+            // need to send them back to userDashboard 
+            res.redirect('/userDashboard/?role=user'); 
+        }   
+     }); 
+}); 
 
 app.listen(3000, function(){
     console.log("Server started on port 3000");
