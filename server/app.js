@@ -180,10 +180,11 @@ app.post('/login' , function( req, res){
                     }
                     else {
                             if(foundUser[0].role === 'owner' ){
-                                res.redirect("/ownerDashboard/?role="+foundUser[0].role);
+                                // staffDashboard
+                                res.redirect("/staffDashboard/?role="+foundUser[0].role);
                             }
                             else if (foundUser[0].role === 'admin'){
-                               res.redirect("/adminDashboard/?role="+foundUser[0].role);
+                               res.redirect("/staffDashboard/?role="+foundUser[0].role);
                             }
                             else{
                                 res.redirect("/userDashboard/?role="+foundUser[0].role);
@@ -253,7 +254,7 @@ app.get("/adminDashboard", loggedIn , function( req, res){
 });
 
 
-app.get("/ownerDashboard" ,loggedIn, uAdminOrOwner, function( req, res){
+app.get("/staffDashboard" ,loggedIn, uAdminOrOwner, function( req, res){
     const filter = req.query.filter;
     const role = req.query.role;  
     const UserID =req.user._id;
@@ -308,18 +309,18 @@ app.post('/filterTickets', function(req,res){
     if(!err){
       
 
-        if( foundUser[0].role === 'owner'){
-            res.redirect('/ownerDashboard/?filter='+filter+'&role='+foundUser[0].role); 
+        if( foundUser[0].role === 'owner' || foundUser[0].role === 'admin'){
+            res.redirect('/staffDashboard/?filter='+filter+'&role='+foundUser[0].role); 
         }
         else{
-            res.redirect('/userDashboard/?filter='+filter+'&role='+foundUser[0].role);
+            res.redirect('/staffDashboard/?filter='+filter+'&role='+foundUser[0].role);
         }
 
     }
     else{ console.log(err) }
 
    });
-    //res.redirect('/ownerDashboard/?filter='+filter); 
+ 
   
 })
 
@@ -493,7 +494,7 @@ app.get('/return',   function(req, res){
       if( role === 'user'){
         res.redirect('/userDashboard/?role='+role); 
     }else { // else they are an admin or owner either way will go to same route 
-        res.redirect('/ownerDashboard/?role='+role); 
+        res.redirect('/staffDashboard/?role='+role); 
     }
 }); 
 
@@ -547,7 +548,7 @@ app.get('/updateTicket', function( req, res){
                 if( !err){
                             console.log( " ticket deleted successfully ")
                            // res.render('TicketSummary',{tickets : foundTicket , role:Role});
-                           res.redirect('/ownerDashboard/?role='+Role); 
+                           res.redirect('/staffDashboard/?role='+Role); 
             
                         }
                         else {
