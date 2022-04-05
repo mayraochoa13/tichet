@@ -4,21 +4,60 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- For the font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- For styling -->
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.11.0/mdb.min.css" rel="stylesheet">
     <title>Login</title>
 </head>
 <body>
+  <section class="loginPage vh-100">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+          <!-- <div class="card shadow-2-strong"  style="background: hsla(0, 0%, 100%, 0.6);
+          backdrop-filter: blur(30px);"> -->
+          <div class="card shadow-2-strong"  style="background-color: #f9f6f3c0; border-radius: 1rem;">
+            <div class="card-body p-5 text-center">
+  
+              <h3 class="mb-5">Log in</h3>
 
-    <h1> Log in </h1>
-    <form action="/login" method="POST">
-        
-          <label for="email">Email</label>
-          <input type="email"  name="username">
-        
-    
-          <label for="password">Password</label>
-          <input type="password"  name="password">
-    
-        <button type="submit" >Login</button>
-      </form>
+              <form action="/login" method="POST">
+                <div class="mb-4" style="text-align: left;">
+                  <label for="email" class="form-label" > Email </label>
+                  <input type="email" name="username" class="form-control form-control-lg" placeholder="john.doe@mail.com"/>
+                </div>
+              
+                <div class="mb-4" style="text-align: left;">
+                  <label for="password" class="form-label">Password</label>
+                  <input type="password" name="password" class="form-control form-control-lg" placeholder="*******"/>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg btn-block">Login</button>
+              </form>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- <h1> Log in </h1>
+  <form action="/login" method="POST">
+
+    <label for="email">Email</label>
+    <input type="email"  name="username">
+
+
+    <label for="password">Password</label>
+    <input type="password"  name="password">
+
+    <button type="submit" >Login</button>
+  </form> -->
 </body>
 </html>
