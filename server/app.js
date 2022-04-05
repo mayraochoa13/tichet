@@ -71,14 +71,6 @@ passport.serializeUser(User.serializeUser());
 // decode cookie message 
 passport.deserializeUser(User.deserializeUser());
 
-// activate filter value 
-// let filterName = 0 ; 
-// let noFilter  = 0 ; 
-// let filterAge = 0 ; 
-let filterVal = 0;
-
-
-
 // timestamp in seconds 
 app.get("/test", function(req, res){ 
     User.find({}, function(err, result){
@@ -91,47 +83,8 @@ app.get("/test", function(req, res){
 
 //app.get("/", function(req, res){
 app.get("/",  uAdminOrOwner, loggedIn,  function(req, res){
-    // this is the route we want to make sure user is authenticated 
-        // 1) filters by name
-        // 2) filters by age
-        // 3) undo the work
-        switch(filterVal){
-            case "1":
-                Sample.find().sort({name:1}).exec(function( err, sortedUsers){
-                    if( !err ){
-                        res.render('dashboard' , { dataList : sortedUsers }); 
-                    }
-                });
-                break;
-            case "2":
-                Sample.find().sort({age:1}).exec(function( err, sortedUsersByAge){
 
-                    if( !err ){
-                        res.render('dashboard' , { dataList : sortedUsersByAge }); 
-                    }
-                });
-                break;   
-            default: 
-                Sample.find({}, function( err, foundUsers){
-                // found all the documents and stored them on found users 
-                    if( ! err){
-                        res.render('dashboard', { dataList : foundUsers}); 
-                    }
-                }); 
-                break;
-        }
   
-}); 
-
-app.post("/trigger", function( require, response){
-
-    // filterName = require.body.filterName; 
-    // noFilter = require.body.undoFilter; 
-    // filterAge = require.body.filterAge; 
-    filterVal = require.body.filter
-
-    response.redirect("/")
-
 }); 
 
 app.get("/home", function( req, res){
@@ -236,9 +189,7 @@ app.post('/login' , function( req, res){
                     }
 
                 }); // end find()
-               
-            // redirect to somewhere any body can access, the 'create form' will be in this route// or replaced by it in the future 
-           // res.redirect("/newUser"); 
+           
         })
     })
 }); 
@@ -248,7 +199,7 @@ app.get("/userDashboard",loggedIn, function(req, res){
     const UserID=req.user._id;
     //const UserID=req.query.userID;
     const role = req.query.role; 
-    console.log('/userD role: '+role); 
+    
     let filter = req.query.filter; 
    
     
@@ -256,12 +207,7 @@ app.get("/userDashboard",loggedIn, function(req, res){
     //console.log(strID.length );
     strID = strID.substr(1);
     strID = strID.substring(0, strID.length - 1);
-    //console.log(strID.length );
 
-    
-     //console.log("this is a string: ", strID);
-    // console.log(filter );
-    //userID
     if( filter === 'urgency'){
        
         Ticket.find({userID:strID}).sort({urgency: 1}).exec(function( err, sortedTickets){
@@ -398,9 +344,17 @@ app.get('/ManageUsers',loggedIn,  uOwner, function( req, res){
     }); 
             //res.redirect('/ManageUsers');
     }
-    else if(query === 'az'){
+    else if(query === 'first'){
         // attempting to order users without case sensitivity, sort orders A first over a
-            User.find().collation({locale: "en"}).sort({username:1}).exec(function( err, foundUserInRole){
+            User.find().collation({locale: "en"}).sort({FirstName:1}).exec(function( err, foundUserInRole){
+                if( !err ){
+                    res.render('manageUsers',{ ListOfUsers: foundUserInRole}); 
+                }
+            });
+    }
+    else if(query === 'last'){
+        // attempting to order users without case sensitivity, sort orders A first over a
+            User.find().collation({locale: "en"}).sort({LastName:1}).exec(function( err, foundUserInRole){
                 if( !err ){
                     res.render('manageUsers',{ ListOfUsers: foundUserInRole}); 
                 }
