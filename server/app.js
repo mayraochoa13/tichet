@@ -150,8 +150,10 @@ app.post('/login' , function( req, res){
 
     req.login( user , function(err){
         if(err){
-            console.log(err);
+            //console.log(err);
+            //res.redirect('/login'); 
         }
+        else{
 
         // create and send a cookie to browser to let it know user are logged in 
         passport.authenticate("local")(req, res, function(){
@@ -191,6 +193,7 @@ app.post('/login' , function( req, res){
                 }); // end find()
            
         })
+        }// else 
     })
 }); 
 app.get("/userDashboard",loggedIn, function(req, res){
