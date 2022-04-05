@@ -37,7 +37,10 @@ app.use(bodyParser.urlencoded({extended:true }));
 
 // connecting css to the server
 const path = require('path')
-app.use('/static', express.static(path.join(__dirname, 'public')))
+// app.use('/static', express.static(path.join(__dirname, '/public')))
+// app.use("/public", express.static(__dirname + "/public")); <-- this one also works
+app.use(express.static(__dirname + '/public'));
+
 
 // start session 
 app.use(session({
