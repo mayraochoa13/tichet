@@ -156,7 +156,7 @@ app.post('/login' , function( req, res){
         else{
 
         // create and send a cookie to browser to let it know user are logged in 
-        passport.authenticate("local")(req, res, function(){
+        passport.authenticate("local", { failureRedirect: '/login', failureMessage: true })(req, res, function(){
 
           
             // they are allowed to see dashboard 
