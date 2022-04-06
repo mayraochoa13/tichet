@@ -529,17 +529,25 @@ app.get('/updateTicket', function( req, res){
                 Ticket.updateOne({_id: ticketID}, updatedStatus, function(err){
                     if(!err){
                         console.log("Ticket Status updated !");
+                              // render Ticket Summary
+                        Ticket.find({_id: ticketID}, function(err, foundTicket){
+                            if(!err){
+                    
+                            res.render('TicketSummary',{tickets : foundTicket , role:Role});
+                                
+                            }
+                        });
                     }
                     else{ console.log(err)}
                 }); 
-                    // render Ticket Summary
-                Ticket.find({_id: ticketID}, function(err, foundTicket){
-                    if(!err){
+                //     // render Ticket Summary
+                // Ticket.find({_id: ticketID}, function(err, foundTicket){
+                //     if(!err){
                
-                      res.render('TicketSummary',{tickets : foundTicket , role:Role});
+                //       res.render('TicketSummary',{tickets : foundTicket , role:Role});
                         
-                    }
-                });
+                //     }
+                // });
 
         }
         else {
