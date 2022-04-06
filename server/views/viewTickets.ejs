@@ -56,7 +56,11 @@
       <td> <%= ticket.createdBy %></td>      
       <td> <%= ticket.contact %></td>
       <td> <%= ticket.status %></td>
-      <td><%= ticket.createdAt %></td>
+
+
+      <td>
+        <%=  ticket.createdAt %>
+      </td>
       <% if(role === 'user'){ %>
             <td>
               <form action="/editTicket" method="post">
@@ -89,5 +93,11 @@
       <button type="submit">Manage Users </button>    
     </form>  
     <% } %> 
+
+    <br>
+    <form action="/logout" method="get">
+      <button type="submit">log out </button>    
+    </form>  
+
 </body>
 </html>
