@@ -407,7 +407,7 @@ app.get("/createTicket" , loggedIn,  function( req, response){
     response.render('createTicket'); 
 })
 //Create ticket 
-app.post('/createTicket', function(req, response){
+app.post('/createTicket',loggedIn, function(req, response){
     const UserID = req.user._id;
     const ticketTitle = req.body.newTitle;
     const ticketDes = req.body.newDes;
@@ -422,11 +422,15 @@ app.post('/createTicket', function(req, response){
 
     const newTicket = { title: ticketTitle ,  description : ticketDes, urgency: ticketUrgency, createdBy: ticketCreatedBy,userID: UserID, contact: ticketContact, status:ticketStatus}; 
 
+    Ticket.find({userID: UserID }, function(err, foundTicket){
+        console.log(foundTicket[0].createdAt); 
+        // const tickeCreateDate = foundTicket[0].createdAt;
+    }); 
 
         Ticket.insertMany(newTicket); 
         // insert ticket now redirect to dashboard 
-        const CurrentRole= 'user'
 
+        const CurrentRole= 'user';
         response.redirect("/userDashboard/?role="+CurrentRole); 
   
 });

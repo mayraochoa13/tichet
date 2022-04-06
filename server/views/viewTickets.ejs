@@ -56,11 +56,15 @@
       <td> <%= ticket.createdBy %></td>      
       <td> <%= ticket.contact %></td>
       <td> <%= ticket.status %></td>
+<<<<<<< HEAD
 
 
       <td>
         <%=  ticket.createdAt %>
       </td>
+=======
+      <td><%= ticket.createdAt.toString().substr(0,15) %></td>
+>>>>>>> mayra
       <% if(role === 'user'){ %>
             <td>
               <form action="/editTicket" method="post">
