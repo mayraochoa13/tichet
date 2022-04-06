@@ -82,15 +82,10 @@ app.get("/test", function(req, res){
 });
 
 //app.get("/", function(req, res){
-app.get("/",  uAdminOrOwner, loggedIn,  function(req, res){
+app.get("/",  function(req, res){
 
-  
-}); 
-
-app.get("/home", function( req, res){
     res.render("home"); 
 }); 
-
 
 app.get("/login", function( req , res ){
     res.render("login");
@@ -330,8 +325,8 @@ app.post('/filterTickets', function(req,res){
 app.get('/logout', function( req, res){
     req.logout();
 
-    // log out and take to log in / register page 
-    res.redirect('/home');
+    // log out and take to log in / welcome page 
+    res.redirect('/');
 });
 
 //loggedIn,  uOwner, 
