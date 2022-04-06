@@ -71,16 +71,6 @@ passport.serializeUser(User.serializeUser());
 // decode cookie message 
 passport.deserializeUser(User.deserializeUser());
 
-// timestamp in seconds 
-app.get("/test", function(req, res){ 
-    User.find({}, function(err, result){
-        if(!err){
-            res.render('manage_users', {users : result});
-         }
-         console.log(result);
-    });
-});
-
 //app.get("/", function(req, res){
 app.get("/",  function(req, res){
 
