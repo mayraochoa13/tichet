@@ -239,15 +239,6 @@ app.get("/userDashboard",loggedIn, function(req, res){
     });
     }
 });
-app.get("/adminDashboard", loggedIn , function( req, res){
-    const UserID=req.user._id; // admin
-    Ticket.find({}, function(err, result){
-        if(!err){
-            res.render('viewTickets', {tickets : result , user: UserID});
-         }
-    });
-});
-
 
 app.get("/staffDashboard" ,loggedIn, uAdminOrOwner, function( req, res){
     const filter = req.query.filter;
@@ -421,7 +412,7 @@ app.post('/filterUsers', function(req,res){
    
 })
 
-app.get("/createTicket" , function( req, response){
+app.get("/createTicket" , loggedIn,  function( req, response){
 
     response.render('createTicket'); 
 })
@@ -450,7 +441,7 @@ app.post('/createTicket', function(req, response){
   
 });
 //Display Tickets
-app.get("/viewTickets", function(req, res){ 
+app.get("/viewTickets", loggedIn,  function(req, res){ 
     // need to know who is viewing the tickets to know their role 
     Ticket.find({}, function(err, result){
         if(!err){
@@ -459,7 +450,7 @@ app.get("/viewTickets", function(req, res){
     });
 });
 
-app.get('/TicketSummary', function(req, res){
+app.get('/TicketSummary',loggedIn,  function(req, res){
     const ticketId = req.query.ticketID; 
     const role = req.query.role; 
 
@@ -483,7 +474,7 @@ app.post('/TicketSummary', function(req, res){
 
 }); 
 
-app.get('/return',   function(req, res){
+app.get('/return',  loggedIn,  function(req, res){
     const role = req.query.role; 
 
       if( role === 'user'){
@@ -512,7 +503,7 @@ app.post('/updateTicket', function( req, res){
     res.redirect('/updateTicket/?ticketID='+substringValues[0]+'&role='+substringValues[1]+'&status='+substringValues[2]); 
 }); 
 
-app.get('/updateTicket', function( req, res){
+app.get('/updateTicket', loggedIn,  function( req, res){
  
         const ticketID= req.query.ticketID;
         const Role= req.query.role;
@@ -564,7 +555,7 @@ app.get('/updateTicket', function( req, res){
 
 }); 
 
-app.post('/editTicket' ,function(req, res){
+app.post('/editTicket' , function(req, res){
     let ticketIdAndRole = req.body.IDandROLE; 
     var index = ticketIdAndRole.indexOf("$");  // Gets the first index where a '$' 
     var ticketId= ticketIdAndRole.substr(0, index); // Gets the first part _id
@@ -574,7 +565,7 @@ app.post('/editTicket' ,function(req, res){
     
 }); 
 
-app.get('/editTicket' ,function(req, res){
+app.get('/editTicket', loggedIn  ,function(req, res){
  
     var ticketId= req.query.ticketID
     var role = req.query.role; 
