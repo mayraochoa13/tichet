@@ -8,46 +8,45 @@
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>View Tickets</title>
-   <style>
-    *{
-        text-align: center;
-    }
-    td, th {
-      border: 1px solid #dddddd;
-      text-align: center;
-      padding: 8px;
-    }
-
-    </style>
+        <!-- For font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+        <!-- For styling -->
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.11.0/mdb.min.css" rel="stylesheet">  
 
 </head>
 <body>
-  <h1>View Tickets</h1>
-  <table>
-    <tr style="background-color:#DEDDDC;">
+  <section class="viewTickets vh-100">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-18 col-md-5 col-lg-10 col-xl-10">
+          <div class="card shadow-2-strong"  style="background-color: #f9f6f3c0; border-radius: 1rem;">
+            <div class="card-body p-10 text-center">
+            <h1>View Tickets</h1>
+            <div class="mb-4" style="text-align: center;">
+            <table>
+              <tr style="background-color:#DEDDDC;">
+                <form action="/filterTickets" method="post">
+                      <th>Title</th>
+                      <!-- <th>Description</th> -->
+                        <th>
+                            <button name="option" value="urgency$<%=user%>"> Urgency</button>
+                        </th>
+                      
+                      <th>Created by</th>
+                      <th>Contact</th>
 
-     <form action="/filterTickets" method="post">
-            <th>Title</th>
-            <!-- <th>Description</th> -->
-              <th>
-                  <button name="option" value="urgency$<%=user%>"> Urgency</button>
-              </th>
-            <th>Created by</th>
-            <th>Contact</th>
+                      <th>
+                        <button name="option" value="status$<%=user%>"> Status</button>
+                      </th>
 
-            <th>
-              <button name="option" value="status$<%=user%>"> Status</button>
-            </th>
-
-            <th>
-              <button name="option" value="date$<%=user%>"> Date</button>
-            </th>
-
-
-           
-         
-     </form> 
-    </tr>
+                      <th>
+                        <button name="option" value="date$<%=user%>"> Date</button>
+                      </th>
+                </form> 
+              </tr>
     <% tickets.forEach(function(ticket) {  %>
     <tr>
       <td> <%= ticket.title %></td>
@@ -63,6 +62,7 @@
                 <button type="submit" name="IDandROLE" value="<%= ticket._id %>$<%= role %>"> edit </button>
               </form>
             </td>
+      
 
        <% } else { %> 
         <td>
@@ -76,24 +76,29 @@
       <% }) %>
 
     </tr>
-  </table>
-<br>
+    </table><br>
   <% if(role === 'user'){ %>
   <form action="/createTicket" method="get">
-    <button type="submit">Create a ticket</button>    
+    <button class="btn btn-success btn-lg btn-block" name="returnBtn" type="submit">Create a ticket</button>    
   </form>  
   <% } %>  
 
   <% if(role === 'owner'){ %>
     <form action="/ManageUsers" method="get">
-      <button type="submit">Manage Users </button>    
+      <button class="btn btn-success btn-lg btn-block" name="returnBtn" type="submit">Manage Users </button>    
     </form>  
     <% } %> 
 
     <br>
     <form action="/logout" method="get">
-      <button type="submit">log out </button>    
+      <button class="btn btn-success btn-lg btn-block" name="returnBtn" type="submit">log out </button>    
     </form>  
-
+          </div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </section>
 </body>
 </html>
