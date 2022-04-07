@@ -2,26 +2,27 @@
 
     <title>Register</title>
 </head>
-<body>
-  <section class="registerPage vh-100">
+<body class="blueGreenMix">
+  <section class="vh-100">
     <div class="container py-5 h-100">
       <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-          <div class="card shadow-2-strong"  style="background-color: #f9f6f3c0; border-radius: 1rem;">
+          <div class="card shadow-2-strong mb-5"  style="background-color: #f9f6f3c0; border-radius: 1rem;">
             <div class="card-body p-5 text-center">
   
               <h3 class="mb-5">Register</h3>
 
               <form action="/register" method="POST">
 
+
                 <div class="mb-4" style="text-align: left;">
                   <label for="First Name" class="text-left form-label" > First Name</label>
-                  <input type="text" name="first_name" class="form-control form-control-lg" placeholder="First Name"/>
+                  <input type="text" name="first_name" class="form-control form-control-lg" placeholder="John"/>
                 </div>
 
                 <div class="mb-4" style="text-align: left;">
                   <label for="Last Name" class="text-left form-label" > Last Name</label>
-                  <input type="text" name="last_name" class="form-control form-control-lg" placeholder="Last Name"/>
+                  <input type="text" name="last_name" class="form-control form-control-lg" placeholder="Doe"/>
                 </div>
 
                 <div class="mb-4" style="text-align: left;">
@@ -33,8 +34,13 @@
                   <label for="password" class="form-label">Password</label>
                   <input type="password" name="password" class="form-control form-control-lg" placeholder="*******"/>
                 </div>
-                <button type="submit" class="btn btn-success btn-lg btn-block">Login</button>
+                <button type="submit" class="btn btn-success btn-lg btn-block"> Register </button>
               </form>
+
+              <div class="mt-4 d-flex justify-content-center pb-2">
+                <p class="mb-0 me-2">Didn't mean to click?</p>
+                <a href="/login" role="button" class="text-success"> Go Back </a>
+              </div>
 
             </div>
           </div>
@@ -43,6 +49,7 @@
     </div>
 
   </section>
+
     <!-- <h1> Register </h1>
     <form action="/register" method="POST">
       
