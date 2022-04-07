@@ -1,25 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- For the font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
-    <!-- For styling -->
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.11.0/mdb.min.css" rel="stylesheet">
+<%- include('../partials/header'); %>
     <title>Login</title>
 </head>
+
 <body>
-  <section class="loginPage vh-100">
+  <section class="blueGreenMix vh-100">
     <div class="container py-5 h-100">
       <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-          <!-- <div class="card shadow-2-strong"  style="background: hsla(0, 0%, 100%, 0.6);
-          backdrop-filter: blur(30px);"> -->
           <div class="card shadow-2-strong"  style="background-color: #f9f6f3c0; border-radius: 1rem;">
             <div class="card-body p-5 text-center">
   
@@ -35,15 +22,20 @@
                   <label for="password" class="form-label">Password</label>
                   <input type="password" name="password" class="form-control form-control-lg" placeholder="*******"/>
                 </div>
-                <button type="submit" class="btn btn-primary btn-lg btn-block">Login</button>
+
+                <button class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
               </form>
+
+              <div class="mt-4 d-flex justify-content-center pb-4">
+                <p class="mb-0 me-2">Don't have an account?</p>
+                <a href="/register" role="button"> Create New </a>
+              </div>
 
             </div>
           </div>
         </div>
       </div>
     </div>
-
   </section>
 
 
@@ -59,5 +51,14 @@
 
     <button type="submit" >Login</button>
   </form> -->
+
+  <!-- <h1> Welcome to Tichet :) </h1>
+
+  <a  href="/register" role="button">Register</a>
+  <a  href="/login" role="button">Login</a> -->
 </body>
+
+
+<%- include('../partials/footer'); %>
+
 </html>
