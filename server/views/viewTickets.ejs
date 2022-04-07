@@ -27,7 +27,6 @@
                         </th>
                       
                       <th>Created by</th>
-                      <th>Contact</th>
 
                       <th>
                         <button name="option" class = "btn btn-secondary btn-sm" value="status$<%=user%>" style="background-color: transparent; color:black"> Status</button>
@@ -45,7 +44,6 @@
       <!-- <td> <%= ticket.description %></td> -->
       <td> <%= ticket.urgency.substr(1) %></td>
       <td> <%= ticket.createdBy %></td>      
-      <td> <%= ticket.contact %></td>
       <td> <%= ticket.status %></td>
       <td><%= ticket.createdAt.toString().substr(0,15) %></td>
       <% if(role === 'user'){ %>
@@ -59,7 +57,7 @@
        <% } else { %> 
         <td>
           <form action="/TicketSummary" method="post">
-            <button type="submit" name="summary" value="<%= ticket._id %>$<%= role %>"> -> </button>
+            <button type="submit" class="btn btn-success " name="summary" value="<%= ticket._id %>$<%= role %>" style="background-color: transparent;color:black "> See more </button>
           </form>
         </td> 
         
