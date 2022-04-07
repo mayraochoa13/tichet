@@ -70,7 +70,7 @@
 
         </td>
       <!-- <td> <%= ticket.status %></td> -->
-      <td><%= typeof ticket.createdAt %></td> 
+      <td><%=ticket.createdAt.toString().substr(0,15) %></td> 
       <% }) %>
 
     </tr>
