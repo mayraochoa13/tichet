@@ -6,6 +6,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Users</title>
+
+    <style>
+        *{
+            text-align: center;
+        }
+        td, th {
+          border: 1px solid #dddddd;
+          text-align: center;
+          padding: 8px;
+        }
+    
+        </style>
 </head>
 <body>
     <h1> Manage Users  </h1>
@@ -21,22 +33,28 @@
                 <option name="admin" value="admin">admin</option>
                 <option name="owner" value="owner">owner</option>
                 <optgroup label="Other"></optgroup>
-                <option name="alphabetical" value="az">A-Z</option>
+                <option name="alphabetical" value="first">first name</option>
+                <option name="alphabetical" value="last">last name</option>
                 <option name="alphabetical" value="all">none</option>
             
         </select>
         <input type="submit" value="Apply"/> 
     </form>
 
+
+    <br>
     <table style="margin-left: auto; margin-right: auto;">
         <tr>
+            <th> First Name </th>
+            <th> Last Name </th>
             <th> Email </th>
-            
-            <th> Update </th>
+            <th> Role </th>
 
         </tr>
         <% ListOfUsers.forEach( function(user) {  %>
         <tr>
+            <td><%= user.FirstName %></td>
+            <td><%= user.LastName %></td>
             <td><%= user.username %></td>
             
            
@@ -60,17 +78,19 @@
             </td>
         </tr>
   
-
-
-
-
-  
-
-       
           
        <% }) %>
 
+
        </table>
    
+<br>
+<br>
+<br>
+
+
+    <form action="/return" method="post">
+    <button type="submit" name="returnBtn" value="owner"> <-back to dashboard</button>
+    </form>
 </body>
 </html>

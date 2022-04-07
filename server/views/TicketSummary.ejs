@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>View Tickets</title>
+   <style>
+    *{
+        text-align: center;
+    }
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: center;
+      padding: 8px;
+    }
+
+    </style>
+
+</head>
+<body>
+  <h1>Ticket Summary</h1>
+
+  <% if( role != 'user') { %> 
+
+  
+  <table>
+    <tr style="background-color:#DEDDDC;">
+
+     <form action="/filterTickets" method="post">
+            <th>Title</th>
+            <th>Description</th>
+              <th>
+                Urgency
+              </th>
+            <th>Created by</th>
+            <th>Contact</th>
+            <th>
+             Status
+            </th>
+            <th>
+               Date
+           </th>
+         
+     </form> 
+    </tr>
+    <% tickets.forEach(function(ticket) {  %>
+    <tr>
+      <td> <%= ticket.title %></td>
+      <td> <%= ticket.description %></td>
+      <td> <%= ticket.urgency.substr(1) %></td>
+      <td> <%= ticket.createdBy %></td>      
+      <td> <%= ticket.contact %></td>
+
+
+<!-- allow staff(owner / admin) to make changes to the ticket status  -->
+   
+        <td> 
+       
+            <form  action="/updateTicket" method="post">
+                                <select class="selectpicker" data-style="btn-info" name="statusUpdate" >
+                                    
+                                    <option value="" disabled selected hidden><%=ticket.status %></option>
+                                        <optgroup label="Update Status"></optgroup>
+                                        <option name="complete" value="<%= ticket._id %>$<%=role %>$complete">complete</option>
+                                        <option name="pending" value="<%= ticket._id %>$<%=role %>$pending">pending</option>
+                                        <option name="submitted" value="<%= ticket._id %>$<%=role %>$submitted">submitted</option>
+                                       
+                                        <optgroup label="DELETE"></optgroup>
+                                        <option name="DELETE" value="<%= ticket._id %>$<%=role %>$DELETE">DELETE</option>
+                                    
+                                </select>
+                                <input type="submit" value="update"/> 
+            </form>
+
+        </td>
+      <!-- <td> <%= ticket.status %></td> -->
+      <td><%= typeof ticket.createdAt %></td> 
+      <% }) %>
+
+    </tr>
+  </table>
+
+  <% } else { %> 
+    <% tickets.forEach(function(ticket) {  %>
+       
+     <form action="/UserUpdateTicket" method="post">
+        <h4>Title</h4>
+        <input type="text" name="title" placeholder="<%= ticket.title %>" />
+
+        <h4>Description</h4>
+        <input type="text" name="description" placeholder="<%= ticket.description %>" />
+ 
+        <!-- <h3> <%= ticket.urgency.substr(1) %></h3> -->
+
+        <h4>Created By</h4>
+        <input type="text" name="createdBy" placeholder="<%= ticket.createdBy %>" />
+
+        <h4>Contact</h4>
+        <input type="text" name="contact" placeholder="<%= ticket.contact %>" />
+
+        <br>
+        <br>
+        <button type="submit" name="update">save</button>
+
+    </form>
+        <% }) %>
+    <% } %> 
+
+  <br>
+  <form action="/return" method="post">
+      <button type="submit" name="returnBtn" value="<%=role%>"> <-back to dashboard</button>
+  </form>
+
+</body>
+</html>

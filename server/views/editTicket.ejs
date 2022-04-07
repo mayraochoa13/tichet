@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Edit Tickets</title>
+   <style>
+    *{
+        text-align: center;
+    }
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: center;
+      padding: 8px;
+    }
+
+    </style>
+
+</head>
+<body>
+  <h1>Edit Ticket</h1>
+
+
+  
+  <table>
+    <tr style="background-color:#DEDDDC;">
+
+    
+            <th>Title</th>
+            <th>Description</th>
+              <th>
+                Urgency
+              </th>
+            <th>Created by</th>
+            <th>Contact</th>
+            <th>
+             Status
+            </th>
+            <th>
+               Date
+           </th>
+         
+  
+    </tr>
+    <% tickets.forEach(function(ticket) {  %>
+        <form action="/editMenu" method="post">
+    <tr>
+      <td> 
+          <%= ticket.title %>
+          <br>
+            <button type="submit" name="title" value="<%= ticket._id %>$title"> edit </button>
+    </td>
+    <td>
+           <%= ticket.description %>
+           <br>
+           <button type="submit" name="description" value="<%= ticket._id %>$description"> edit </button>
+    </td>
+    
+    <td> 
+   
+            <select name="urgencyUpdate" >
+                
+                <option value="" disabled selected hidden> <%= ticket.urgency.substr(1) %></option>
+                    <optgroup label="Update Urgency"></optgroup>
+                    <option value="1high" name="high">high</option>
+                    <option value="2medium" name="medium">medium</option>
+                    <option value="3low" name="low">low</option>                
+            </select>
+            <input formaction="/updateUrgency/?ticketID=<%= ticket._id %>" type="submit" value="update">
+          
+        
+    </td>
+    
+    <td> 
+          <%= ticket.createdBy %>
+          <br>
+          <button type="submit" name="createdBy" value="<%= ticket._id %>$createdBy"> edit </button>
+    </td> 
+
+    <td> 
+        <%= ticket.contact %>
+        <br>
+        <button type="submit" name="contact"  value="<%= ticket._id %>$contact"> edit </button>
+    </td>
+      <td> <%= ticket.status %></td>
+      <td><%= ticket.createdAt %></td>
+
+      <% }) %>
+
+    </tr>
+        </form>
+  </table>
+
+
+        <br>
+        <br>
+ <% tickets.forEach(function(ticket) {  %>
+<!-- <form action="/editTicketSections/?ticketID=<%= ticket._id %>" method="post"> -->
+        <% if( editOption === 'title'){ %>
+        <form action="/updateTitle/?ticketID=<%= ticket._id %>" method="post">
+           <label for="title"> Title:  </label> 
+           <input type="text" name="UptdTitle"  placeholder="<%= ticket.title %>"> 
+            <button type="submit" > update </button>
+        </form>
+
+        <%  }  else if( editOption ==='description'){ %>
+            <form action="/updateDescription/?ticketID=<%= ticket._id %>" method="post">
+              <label for="description"> Description:  </label> 
+                <input type="text" name="UptdDescription" placeholder="<%= ticket.description %>">
+                <button type="submit"  > update </button>
+            </form>
+
+         <%  } else if( editOption ==='createdBy'){ %>
+
+            <form action="/updateCreatedBy/?ticketID=<%= ticket._id %>" method="post">
+              <label for="createdBy"> Created By:  </label> 
+                <input type="text" name="UptdCreatedBy" placeholder="<%= ticket.createdBy %>">
+                <button type="submit"  > update </button>
+            </form>
+
+        <%  }  else if( editOption ==='contact'){ %>
+
+            <form action="/updateContact/?ticketID=<%= ticket._id %>" method="post">
+              <label for="contact"> Contact:  </label> 
+                <input type="text" name="UptdContact" placeholder="<%= ticket.contact %>">
+                <button type="submit" > update </button>
+            </form>
+            <%  }    %>
+
+
+            <br>
+            <form action="/updateDelete" method="post">
+              <button type="submit" name="deleteBTN" value="<%= ticket._id %>">DELETE</button>
+            </form>
+            <br>
+ <% }) %> 
+
+<!-- </form> -->
+    <br>
+    <br>
+    <br>
+    <br>
+  <form action="/return" method="post">
+      <button type="submit" name="returnBtn" value="<%=role%>"> <-back to dashboard</button>
+  </form>
+
+</body>
+</html>

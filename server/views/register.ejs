@@ -24,6 +24,18 @@
               <h3 class="mb-5">Register</h3>
 
               <form action="/register" method="POST">
+
+
+                <div class="mb-4" style="text-align: left;">
+                  <label for="First Name" class="text-left form-label" > First Name</label>
+                  <input type="text" name="first_name" class="form-control form-control-lg" placeholder="First Name"/>
+                </div>
+
+                <div class="mb-4" style="text-align: left;">
+                  <label for="Last Name" class="text-left form-label" > Last Name</label>
+                  <input type="text" name="last_name" class="form-control form-control-lg" placeholder="Last Name"/>
+                </div>
+
                 <div class="mb-4" style="text-align: left;">
                   <label for="email" class="text-left form-label" > Email </label>
                   <input type="email" name="username" class="form-control form-control-lg" placeholder="john.doe@mail.com"/>
@@ -45,13 +57,20 @@
   </section>
     <!-- <h1> Register </h1>
     <form action="/register" method="POST">
-        
+      
+          <label for="First Name">First Name</label>
+          <input type="text" name="first_name">
+      
+          <label for="Last Name">Last Name</label>
+          <input type="text"  name="last_name">
+
           <label for="email">Email</label>
           <input type="email" name="username">
       
           <label for="password">Password</label>
           <input type="password"  name="password">
-        
+
+    
         <button type="submit" >Register</button>
       </form> -->
 </body>

@@ -59,7 +59,7 @@ app.use(passport.session());
 //import Ticket from "./models/ticket"; 
 
 // import model 
-const Sample = require('./models/sample'); 
+ 
 const Ticket = require('./models/ticket');
 const User = require('./models/User'); 
 
@@ -74,74 +74,11 @@ passport.serializeUser(User.serializeUser());
 // decode cookie message 
 passport.deserializeUser(User.deserializeUser());
 
-// activate filter value 
-// let filterName = 0 ; 
-// let noFilter  = 0 ; 
-// let filterAge = 0 ; 
-let filterVal = 0;
-// activate filter /ManageUsers 
-let query = null; 
-
-
-// timestamp in seconds 
-app.get("/test", function(req, res){ 
-    User.find({}, function(err, result){
-        if(!err){
-            res.render('manage_users', {users : result});
-         }
-         console.log(result);
-    });
-});
-
 //app.get("/", function(req, res){
-app.get("/",  uAdminOrOwner, loggedIn,  function(req, res){
-    // this is the route we want to make sure user is authenticated 
-        // 1) filters by name
-        // 2) filters by age
-        // 3) undo the work
-        switch(filterVal){
-            case "1":
-                Sample.find().sort({name:1}).exec(function( err, sortedUsers){
-                    if( !err ){
-                        res.render('dashboard' , { dataList : sortedUsers }); 
-                    }
-                });
-                break;
-            case "2":
-                Sample.find().sort({age:1}).exec(function( err, sortedUsersByAge){
+app.get("/",  function(req, res){
 
-                    if( !err ){
-                        res.render('dashboard' , { dataList : sortedUsersByAge }); 
-                    }
-                });
-                break;   
-            default: 
-                Sample.find({}, function( err, foundUsers){
-                // found all the documents and stored them on found users 
-                    if( ! err){
-                        res.render('dashboard', { dataList : foundUsers}); 
-                    }
-                }); 
-                break;
-        }
-  
-}); 
-
-app.post("/trigger", function( require, response){
-
-    // filterName = require.body.filterName; 
-    // noFilter = require.body.undoFilter; 
-    // filterAge = require.body.filterAge; 
-    filterVal = require.body.filter
-
-    response.redirect("/")
-
-}); 
-
-app.get("/home", function( req, res){
     res.render("home"); 
 }); 
-
 
 app.get("/login", function( req , res ){
     res.render("login");
@@ -165,29 +102,24 @@ app.post('/register', function( req , res ){
         // we are using 'local' strategy 
         passport.authenticate("local")(req, res, function(){
 
-           // console.log( req.user.role); 
             // we authenticated them, so let them see the '/' which has the dashboard 
 
             // before we redirect need to assign them a role 
-            const updatedRole = { role: 'user'}; // assigning default role = 'user'
+            const first_name= req.body.first_name; 
+            const last_name= req.body.last_name;
+            const updatedUserDetails = {FirstName: first_name, LastName: last_name, role: 'user'}; // assigning default role = 'user'
 
             // update user's new role 
-            User.updateOne({_id: req.user._id}, updatedRole, function(err){ // start updateOne()
+            User.updateOne({_id: req.user._id}, updatedUserDetails , function(err){ // start updateOne()
                 if(!err){
-                    console.log("user's role is assigned ! "); 
+                    console.log("user registered ! "); 
                 }
 
-                    // if role = user // send to user route 
-
-                    // if role = 
             });  // end updateOne()
 
-          
-                  // if role = user // send to user route 
-
-                    // if role = admin 
+            let newRole = 'user'
             // redirect to somewhere any body can access, the 'create form' will be in this route// or replaced by it in the future 
-            res.redirect("/newUser");  // role==user will always go to this route
+            res.redirect("/userDashboard/?role="+newRole);  // role==user will always go to this route
         })
     }); 
 
@@ -206,11 +138,13 @@ app.post('/login' , function( req, res){
 
     req.login( user , function(err){
         if(err){
-            console.log(err);
+            //console.log(err);
+            //res.redirect('/login'); 
         }
+        else{
 
         // create and send a cookie to browser to let it know user are logged in 
-        passport.authenticate("local")(req, res, function(){
+        passport.authenticate("local", { failureRedirect: '/login', failureMessage: true })(req, res, function(){
 
           
             // they are allowed to see dashboard 
@@ -234,124 +168,155 @@ app.post('/login' , function( req, res){
                     }
                     else {
                             if(foundUser[0].role === 'owner' ){
-                                res.redirect("/ownerDashboard");
+                                // staffDashboard
+                                res.redirect("/staffDashboard/?role="+foundUser[0].role);
                             }
                             else if (foundUser[0].role === 'admin'){
-                               res.redirect("/adminDashboard");
+                               res.redirect("/staffDashboard/?role="+foundUser[0].role);
                             }
                             else{
-                                res.redirect("/userDashboard");
+                                res.redirect("/userDashboard/?role="+foundUser[0].role);
                             }
                     }
 
                 }); // end find()
-               
-            // redirect to somewhere any body can access, the 'create form' will be in this route// or replaced by it in the future 
-           // res.redirect("/newUser"); 
+           
         })
+        }// else 
     })
 }); 
-app.get("/userDashboard", function(req, res){
+app.get("/userDashboard",loggedIn, function(req, res){
+    
+    //http://localhost:3000/userDashboard/?=filter=urgency
     const UserID=req.user._id;
-    console.log(UserID);
-    Ticket.find({userID:UserID}, function(err, foundTickets){
-        if(!err){
-            res.render('viewTickets', {tickets : foundTickets});
-         }
-    });
-});
-app.get("/adminDashboard" , function( req, res){
+    //const UserID=req.query.userID;
+    const role = req.query.role; 
+    
+    let filter = req.query.filter; 
    
-    Ticket.find({}, function(err, result){
-        if(!err){
-            res.render('viewTickets', {tickets : result});
-         }
-    });
-});
+    
+   let strID = JSON.stringify(UserID);
+    //console.log(strID.length );
+    strID = strID.substr(1);
+    strID = strID.substring(0, strID.length - 1);
 
-
-app.get("/ownerDashboard" , function( req, res){
- 
-    Ticket.find({}, function(err, result){
-        if(!err){
-            res.render('viewTickets', {tickets : result});
-         }
-    });
-});
-
-app.get("/newUser" , function( req, res){
-     // user needs all the tickets they have created 
-     //console.log(req.user); 
-     const UserID = req.user._id; 
-     const Username = req.user.username; 
-     
-    //  Ticket.find({user_id: UserId}, function(err, foundTickets){
-
-        // render that list of tickets 
-
-    //  }); 
-
-    res.render('newUserForm'); 
-})
-
-
-app.post("/newUser" , function( req, res){
-     const UserID = req.user._id; 
-     const Username = req.user.username; 
-     console.log("post");
-     console.log(UserID);
-     console.log(Username);
-    const userName = require.body.newName;
-    const userAge = require.body.newAge;
-    // console.log(userName[3])
-
-    const newUser = { name: userName ,  age : userAge}; 
-
-
-    if( userName != undefined && userAge != undefined){
-        Sample.insertMany(newUser); 
-
-        response.redirect("/newUser"); 
-    }
-    else {
-        console.log( " name is : " + userName); 
-        console.log( " age is : " + userAge); 
-    }
-   
-}) 
-
-app.post("/delete", function(require, response){
-
-
-        const UserToDelete = require.body.deleteUser; 
-
-        console.log( " delete this user: " + UserToDelete);
-        
-        Sample.deleteOne( {_id: UserToDelete}, function(err){
-            if( !err){
-
-                console.log( " item deleted successfully ")
-                res.redirect("/"); 
-
-            }
-            else {
-                console.log( err); 
+    if( filter === 'urgency'){
+       
+        Ticket.find({userID:strID}).sort({urgency: 1}).exec(function( err, sortedTickets){
+            if(!err){
+                res.render('viewTickets', {tickets : sortedTickets, user: strID, role: role});
             }
         })
-}); 
+    }
+    else if( filter === 'date'){
+        Ticket.find({userID:strID}).sort({created_at: 1}).exec(function( err, sortedTickets){
+            if(!err){
+                res.render('viewTickets', {tickets : sortedTickets, user: UserID, role: role});
+            }
+        }) 
+    }
+    else if( filter === 'status'){
+        Ticket.find({userID:strID}).sort({status: -1}).exec(function( err, sortedTickets){
+            if(!err){
+                res.render('viewTickets', {tickets : sortedTickets, user: UserID, role: role});
+            }
+        }) 
+    }
+    
+    else{
+
+        Ticket.find({userID:strID}, function(err, foundTickets){
+            if(!err){
+                res.render('viewTickets', {tickets : foundTickets , user: UserID, role: role});
+        }
+    });
+    }
+});
+
+app.get("/staffDashboard" ,loggedIn, uAdminOrOwner, function( req, res){
+    const filter = req.query.filter;
+    const role = req.query.role;  
+    const UserID =req.user._id;
+    if( filter === 'urgency'){
+       
+        Ticket.find().sort({urgency: 1}).exec(function( err, sortedTickets){
+            if(!err){
+                res.render('viewTickets', {tickets : sortedTickets, user: UserID, role: role});
+            }
+        })
+    }
+    else if( filter === 'date'){
+        Ticket.find().sort({created_at: 1}).exec(function( err, sortedTickets){
+            if(!err){
+                res.render('viewTickets', {tickets : sortedTickets, user: UserID,role: role});
+            }
+        }) 
+    }
+    else if( filter === 'status'){
+        Ticket.find().sort({status: -1}).exec(function( err, sortedTickets){
+            if(!err){
+                res.render('viewTickets', {tickets : sortedTickets, user: UserID,role: role});
+            }
+        }) 
+    }
+    
+    else{
+
+    // lets try and render date
+    Ticket.find({}, function(err, result){
+        if(!err){
+            res.render('viewTickets', {tickets : result, user: UserID, role: role});
+         }
+    });
+    }
+});
+
+
+app.post('/filterTickets', function(req,res){
+    //query = req.body.filter; 
+    const filterAndUser = req.body.option; 
+   
+
+    var index = filterAndUser.indexOf("$");  // Gets the first index where a '$' 
+    var filter= filterAndUser.substr(0, index); // Gets the first part _id
+    var userID = filterAndUser.substr(index + 1);  // Gets role 
+ 
+
+   // search up the role of the user based on the id 
+   User.find({_id:userID}, function(err, foundUser){
+
+    if(!err){
+      
+
+        if( foundUser[0].role === 'owner' || foundUser[0].role === 'admin'){
+            res.redirect('/staffDashboard/?filter='+filter+'&role='+foundUser[0].role); 
+        }
+        else{
+            res.redirect('/userDashboard/?filter='+filter+'&role='+foundUser[0].role);
+        }
+
+    }
+    else{ console.log(err) }
+
+   });
+ 
+  
+})
+
+ 
+
 
 app.get('/logout', function( req, res){
     req.logout();
 
-    // log out and take to log in / register page 
-    res.redirect('/home');
+    // log out and take to log in / welcome page 
+    res.redirect('/');
 });
 
 //loggedIn,  uOwner, 
-app.get('/ManageUsers', loggedIn,  uOwner,  function( req, res){
-
-    console.log(query +  " ==== " + null); 
-    if( query === null || query === undefined || query === 'all'){
+app.get('/ManageUsers',loggedIn,  uOwner, function( req, res){
+    const query = req.query.filter; 
+    if(  query === undefined || query === 'all'){
 
         
         User.find({}, function( err, foundUsers){
@@ -362,9 +327,17 @@ app.get('/ManageUsers', loggedIn,  uOwner,  function( req, res){
     }); 
             //res.redirect('/ManageUsers');
     }
-    else if(query === 'az'){
-        
-            User.find().sort({username:1}).exec(function( err, foundUserInRole){
+    else if(query === 'first'){
+        // attempting to order users without case sensitivity, sort orders A first over a
+            User.find().collation({locale: "en"}).sort({FirstName:1}).exec(function( err, foundUserInRole){
+                if( !err ){
+                    res.render('manageUsers',{ ListOfUsers: foundUserInRole}); 
+                }
+            });
+    }
+    else if(query === 'last'){
+        // attempting to order users without case sensitivity, sort orders A first over a
+            User.find().collation({locale: "en"}).sort({LastName:1}).exec(function( err, foundUserInRole){
                 if( !err ){
                     res.render('manageUsers',{ ListOfUsers: foundUserInRole}); 
                 }
@@ -377,7 +350,7 @@ app.get('/ManageUsers', loggedIn,  uOwner,  function( req, res){
                         }
                     }); 
     }
-    //res.redirect('/ManageUsers'); 
+
 }); 
 
 //loggedIn,  uOwner, 
@@ -397,6 +370,11 @@ app.post('/ManageUsers',  function( req, res){
         User.deleteOne({_id: userID}, function(err){
             if( !err){
                 console.log(" successfully deleted user "); 
+                Ticket.deleteMany({userID: userID}, function(err){
+                    if( !err){
+                        console.log(" successfully deleted user's tickets "); 
+                    }
+                })
             }
             res.redirect('/ManageUsers'); 
         }); 
@@ -421,49 +399,303 @@ app.post('/ManageUsers',  function( req, res){
 
 
 app.post('/filterUsers', function(req,res){
-     query = req.body.filter; 
+    const UserFilter = req.body.filter; 
      
-     res.redirect('/ManageUsers'); 
+     res.redirect('/ManageUsers/?filter='+UserFilter); 
    
 })
 
-app.get("/createTicket" , function( req, response){
+app.get("/createTicket" , loggedIn,  function( req, response){
 
     response.render('createTicket'); 
 })
 //Create ticket 
-app.post('/createTicket', function(req, response){
+app.post('/createTicket',loggedIn, function(req, response){
     const UserID = req.user._id;
     const ticketTitle = req.body.newTitle;
     const ticketDes = req.body.newDes;
     const ticketUrgency = req.body.newUrg;
+    console.log(ticketUrgency)
     //Created by
     const ticketCreatedBy = req.body.newCreatedBy;
     const ticketContact = req.body.newContact;
-    const ticketStatus= req.body.newStatus;
+    // when a user creates a ticket they themselves can add a status
+   // const ticketStatus= req.body.newStatus;
+   const ticketStatus='submitted'; 
 
     const newTicket = { title: ticketTitle ,  description : ticketDes, urgency: ticketUrgency, createdBy: ticketCreatedBy,userID: UserID, contact: ticketContact, status:ticketStatus}; 
 
+    Ticket.find({userID: UserID }, function(err, foundTicket){
+        console.log(foundTicket[0].createdAt); 
+        // const tickeCreateDate = foundTicket[0].createdAt;
+    }); 
 
-    if( ticketTitle != undefined && ticketDes != undefined){
         Ticket.insertMany(newTicket); 
+        // insert ticket now redirect to dashboard 
 
-        response.redirect("/userDashboard"); 
-    }
-    else {
-        console.log( " title: " + ticketTitle); 
-        console.log( " description : " + ticketDes); 
-    }
+        const CurrentRole= 'user';
+        response.redirect("/userDashboard/?role="+CurrentRole); 
+  
 });
 //Display Tickets
-app.get("/viewTickets", function(req, res){ 
+app.get("/viewTickets", loggedIn,  function(req, res){ 
+    // need to know who is viewing the tickets to know their role 
     Ticket.find({}, function(err, result){
         if(!err){
-            res.render('viewTickets', {tickets : result});
+            res.render('viewTickets', {tickets : result });
          }
     });
 });
 
+app.get('/TicketSummary',loggedIn,  function(req, res){
+    const ticketId = req.query.ticketID; 
+    const role = req.query.role; 
+
+    Ticket.find({_id: ticketId}, function(err, foundTicket){
+        if(!err){
+            // render found ticket, summary page 
+            res.render('TicketSummary',{tickets : foundTicket , role: role}); 
+        }
+    })
+    
+}); 
+
+app.post('/TicketSummary', function(req, res){
+    const ticketIdAndRole = req.body.summary; 
+  
+    // need to split the string to get ticketID and role 
+    var index = ticketIdAndRole.indexOf("$");  // Gets the first index where a '$' 
+    var ticketId= ticketIdAndRole.substr(0, index); // Gets the first part _id
+    var role = ticketIdAndRole.substr(index + 1);  // Gets role 
+    res.redirect('/TicketSummary/?ticketID='+ticketId+'&role='+role); 
+
+}); 
+
+app.get('/return',  loggedIn,  function(req, res){
+    const role = req.query.role; 
+
+      if( role === 'user'){
+        res.redirect('/userDashboard/?role='+role); 
+    }else { // else they are an admin or owner either way will go to same route 
+        res.redirect('/staffDashboard/?role='+role); 
+    }
+}); 
+
+app.post('/return',   function(req, res){
+    
+        res.redirect('/return/?role='+req.body.returnBtn); 
+   
+}); 
+
+// update ticket status 
+app.post('/updateTicket', function( req, res){
+
+    let ticketIdAndStatus = req.body.statusUpdate; 
+
+    let substringValues= ticketIdAndStatus.split('$'); 
+  
+    // console.log(substringValues[0]);// ticket id 
+    // console.log(substringValues[1]);// role of the user requesting to update 
+    // console.log(substringValues[2]);// what value the ticket status needs to be updated too 
+    res.redirect('/updateTicket/?ticketID='+substringValues[0]+'&role='+substringValues[1]+'&status='+substringValues[2]); 
+}); 
+
+app.get('/updateTicket', loggedIn,  function( req, res){
+ 
+        const ticketID= req.query.ticketID;
+        const Role= req.query.role;
+        const NewStatus = req.query.status; 
+
+        if( NewStatus != 'DELETE'){
+         
+        const updatedStatus = { status: NewStatus}
+                Ticket.updateOne({_id: ticketID}, updatedStatus, function(err){
+                    if(!err){
+                        console.log("Ticket Status updated !");
+                              // render Ticket Summary
+                        Ticket.find({_id: ticketID}, function(err, foundTicket){
+                            if(!err){
+                    
+                            res.render('TicketSummary',{tickets : foundTicket , role:Role});
+                                
+                            }
+                        });
+                    }
+                    else{ console.log(err)}
+                }); 
+                //     // render Ticket Summary
+                // Ticket.find({_id: ticketID}, function(err, foundTicket){
+                //     if(!err){
+               
+                //       res.render('TicketSummary',{tickets : foundTicket , role:Role});
+                        
+                //     }
+                // });
+
+        }
+        else {
+            // delete ticket and render to dashboard and not ticketSummary 
+            Ticket.deleteOne({_id: ticketID}, function(err){
+                if( !err){
+                            console.log( " ticket deleted successfully ")
+                           // res.render('TicketSummary',{tickets : foundTicket , role:Role});
+                           res.redirect('/staffDashboard/?role='+Role); 
+            
+                        }
+                        else {
+                            console.log( err); 
+                        }
+            })
+        }
+
+       
+
+}); 
+
+app.post('/editTicket' , function(req, res){
+    let ticketIdAndRole = req.body.IDandROLE; 
+    var index = ticketIdAndRole.indexOf("$");  // Gets the first index where a '$' 
+    var ticketId= ticketIdAndRole.substr(0, index); // Gets the first part _id
+    var role = ticketIdAndRole.substr(index + 1); 
+
+    res.redirect('/editTicket/?ticketID='+ticketId+'&role='+role); 
+    
+}); 
+
+app.get('/editTicket', loggedIn  ,function(req, res){
+ 
+    var ticketId= req.query.ticketID
+    var role = req.query.role; 
+    var edit = req.query.menuOption; 
+
+   
+    
+   Ticket.find({_id: ticketId}, function(err, foundTicket){
+        try{
+            res.render('editTicket', {tickets : foundTicket, role : role , editOption: edit}); 
+        }
+        catch(err){
+            console.log(err);
+        }
+          
+      
+   });
+}); 
+
+app.post('/editMenu', function(req,res){
+
+    let EditMenuOptions = []; 
+    EditMenuOptions.push(req.body.title); 
+    EditMenuOptions.push(req.body.description); 
+    EditMenuOptions.push(req.body.createdBy); 
+    EditMenuOptions.push(req.body.contact); 
+   
+    for( var i = 0; i < EditMenuOptions.length ; i++){
+        if(EditMenuOptions[i] != undefined){
+             
+           // split string into 2 parts 
+           var index = EditMenuOptions[i].indexOf("$");
+           var ticketId= EditMenuOptions[i].substr(0, index); // Gets the first part _id
+           var option = EditMenuOptions[i].substr(index + 1);  // Gets menu option  
+           res.redirect('/editTicket/?ticketID='+ticketId+'&role=user'+'&menuOption='+option); 
+            //res.redirect('/editTicket/?menuOption='+EditMenuOptions[i]); 
+        }
+    }
+    
+  
+    
+}); 
+
+
+app.post('/updateTitle', function(req, res){
+    const ticketID = req.query.ticketID; 
+    const NewTitle = req.body.UptdTitle;
+    
+    let update = { title: NewTitle }; 
+    Ticket.updateOne({_id: ticketID}, update,function(err){
+        if(!err){
+            console.log('title updated successfully'); 
+
+        }
+    }); 
+    // re render edit ticket page but with updated title value and closed edit menu options 
+    res.redirect('/editTicket/?ticketID='+ticketID+'&role=user'); 
+}); 
+
+app.post('/updateDescription', function(req, res){
+    const ticketID = req.query.ticketID; 
+    const NewDescription = req.body.UptdDescription;
+    
+    let update = { description: NewDescription }; 
+    Ticket.updateOne({_id: ticketID}, update,function(err){
+        if(!err){
+            console.log('description updated successfully'); 
+
+        }
+    }); 
+    // re render edit ticket page but with updated title value and closed edit menu options 
+    res.redirect('/editTicket/?ticketID='+ticketID+'&role=user'); 
+});
+
+app.post('/updateUrgency', function(req, res){
+    const ticketID = req.query.ticketID; 
+    //req.body.urgencyUpdate;
+
+    // console.log(req.body.urgencyUpdate)
+    
+    let update = { urgency: req.body.urgencyUpdate }; 
+    Ticket.updateOne({_id: ticketID}, update,function(err){
+        if(!err){
+            console.log('urgency updated successfully'); 
+
+        }
+    }); 
+    // re render edit ticket page but with updated title value and closed edit menu options 
+    res.redirect('/editTicket/?ticketID='+ticketID+'&role=user'); 
+});
+
+app.post('/updateCreatedBy', function(req, res){
+    const ticketID = req.query.ticketID; 
+    const NewCreatedBy = req.body.UptdCreatedBy;
+    
+    let update = { createdBy: NewCreatedBy }; 
+    Ticket.updateOne({_id: ticketID}, update,function(err){
+        if(!err){
+            console.log('created by updated successfully'); 
+
+        }
+    }); 
+    // re render edit ticket page but with updated title value and closed edit menu options 
+    res.redirect('/editTicket/?ticketID='+ticketID+'&role=user'); 
+});
+
+app.post('/updateContact', function(req, res){
+    const ticketID = req.query.ticketID; 
+    const NewContact = req.body.UptdContact;
+    
+    let update = { contact: NewContact }; 
+    Ticket.updateOne({_id: ticketID}, update,function(err){
+        if(!err){
+            console.log('contact updated successfully'); 
+
+        }
+    }); 
+    // re render edit ticket page but with updated title value and closed edit menu options 
+    res.redirect('/editTicket/?ticketID='+ticketID+'&role=user'); 
+});
+
+app.post('/updateDelete', function(req, res){
+    const ticketID = req.body.deleteBTN; 
+
+    Ticket.deleteOne({_id:ticketID}, function(err){
+        if(!err){
+            console.log('user successfully deleted ticket'); 
+
+            // need to send them back to userDashboard 
+            res.redirect('/userDashboard/?role=user'); 
+        }   
+     }); 
+}); 
 
 app.listen(3000, function(){
     console.log("Server started on port 3000");
