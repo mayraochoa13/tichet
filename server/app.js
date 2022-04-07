@@ -77,7 +77,7 @@ passport.deserializeUser(User.deserializeUser());
 //app.get("/", function(req, res){
 app.get("/",  function(req, res){
 
-    res.render("home"); 
+    res.render("login"); 
 }); 
 
 app.get("/login", function( req , res ){
@@ -292,7 +292,7 @@ app.post('/filterTickets', function(req,res){
             res.redirect('/staffDashboard/?filter='+filter+'&role='+foundUser[0].role); 
         }
         else{
-            res.redirect('/staffDashboard/?filter='+filter+'&role='+foundUser[0].role);
+            res.redirect('/userDashboard/?filter='+filter+'&role='+foundUser[0].role);
         }
 
     }
