@@ -1,26 +1,25 @@
 <%- include('../partials/header'); %>
-
    <title>View Ticket</title>
-   <style>
-    *{
-        text-align: center;
-    }
-    td, th {
-      border: 1px solid #dddddd;
-      text-align: center;
-      padding: 8px;
-    }
-
-    </style>
-
 </head>
-<body>
+<body class="greenBackground">
+
+  <section>
+    <header class="logOut">
+      <form action="/logout" method="get">
+        <a href="/logout"><strong>Log Out</strong></a>    
+      </form>
+      </header> 
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-16 col-md-12 col-lg-12 col-xl-12">
+          <div class="card shadow-2-strong"  style="background-color: #f9f6f3c0; border-radius: 1rem;"> 
+            <div class="card-body p-2 text-center">
   <h1>Ticket Summary</h1>
 
   <% if( role != 'user') { %> 
 
   
-  <table>
+  <table class="table table-bordered">
     <tr style="background-color:#DEDDDC;">
 
      <form action="/filterTickets" method="post">
@@ -66,7 +65,7 @@
                                         <option name="DELETE" value="<%= ticket._id %>$<%=role %>$DELETE">DELETE</option>
                                     
                                 </select>
-                                <input type="submit" value="update"/> 
+                                <input type="submit" value="update" class="btn btn-secondary btn-sm" style="background-color: transparent; color:black"/> 
             </form>
 
         </td>
@@ -97,7 +96,7 @@
 
         <br>
         <br>
-        <button type="submit" name="update">save</button>
+        <button type="submit" name="update" class="btn btn-secondary btn-sm"style="background-color: transparent; color:black">save</button>
 
     </form>
         <% }) %>
@@ -105,8 +104,15 @@
 
   <br>
   <form action="/return" method="post">
-      <button type="submit" name="returnBtn" value="<%=role%>"> <-back to dashboard</button>
+      <button type="submit" name="returnBtn" value="<%=role%>" class="btn btn-secondary btn-sm" style="background-color:#9370db;"> <-back to dashboard</button>
   </form>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
 
 </body>
 </html>

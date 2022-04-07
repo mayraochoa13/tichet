@@ -1,37 +1,23 @@
-<!--
-    View Tickets
--->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-   <meta charset="UTF-8">
-   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<%- include('../partials/header'); %>
    <title>View Tickets</title>
-        <!-- For font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
-        <!-- For styling -->
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.11.0/mdb.min.css" rel="stylesheet">  
-
 </head>
-<body class="viewTickets vh-100">
+<body class="greenBackground ">
 
   <section>
     <header class="logOut">
+      
       <form action="/logout" method="get">
-        <a href="/logout"><strong>Log Out</strong></a>    
+        <a href="/logout"><strong>Log Out</strong></a>
+      </form>    
       </header> 
-    <div class="container py-5 h-100">
+    <div class="container py-6 h-100">
       <div class="row d-flex justify-content-center align-items-center h-100">
-        <div class="col-8 col-md-5 col-lg-8 col-xl-7">
+        <div class="col-16 col-md-14 col-lg-8 col-xl-9">
           <div class="card shadow-2-strong"  style="background-color: #f9f6f3c0; border-radius: 1rem;"> 
             <div class="card-body p-2 text-center">
             <h1>View Tickets</h1>
             <div class="mb-6" style="text-align: center;">
-            <table  >
+            <table  class="table table-bordered">
               <tr style="background-color:#DEDDDC; " >
                 <form action="/filterTickets" method="post">
                       <th>Title</th>
