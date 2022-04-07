@@ -292,7 +292,7 @@ app.post('/filterTickets', function(req,res){
             res.redirect('/staffDashboard/?filter='+filter+'&role='+foundUser[0].role); 
         }
         else{
-            res.redirect('/staffDashboard/?filter='+filter+'&role='+foundUser[0].role);
+            res.redirect('/userDashboard/?filter='+filter+'&role='+foundUser[0].role);
         }
 
     }
