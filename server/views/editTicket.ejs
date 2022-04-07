@@ -84,7 +84,7 @@
         <button type="submit" name="contact"  value="<%= ticket._id %>$contact"> edit </button>
     </td>
       <td> <%= ticket.status %></td>
-      <td><%= ticket.createdAt %></td>
+      <td><%= ticket.createdAt.toString().substr(0,15)%></td>
 
       <% }) %>
 

@@ -5,40 +5,56 @@
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Create Ticket</title>
-   <style>
-    form {
-      border: 1px solid #dddddd;
-      text-align: center;
-      padding: 12px;
-    }
-    </style>
+        <!-- For font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- For styling -->
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.11.0/mdb.min.css" rel="stylesheet">
 </head>
 <body>
- 
-   <h1> Add New Ticket </h1>
-   <form action="/createTicket" method="post">
- 
-       <input type="text" placeholder="title" name="newTitle" autocomplete="off" required><br>
-       <textarea  placeholder="description" name="newDes" rows="5" cols="30" autocomplete="off" required></textarea><br>
-       <select name="newUrg" required>
-        <optgroup label="Select urgency"> </optgroup>
-        <option value="1high" name="newUrg">high</option>
-        <option value="2medium" name="newUrg">medium</option>
-        <option value="3low" name="newUrg">low</option>
-       </select><br>
-       <input type="text " placeholder="created by" name="newCreatedBy" autocomplete="off" required><br>
-       <input type="text " placeholder="contact" name="newContact" autocomplete="off" required><br>
-       <!-- <select name="newStatus">
-        <option> Select status </option>
-        <option value="pending" name="newStatus">pending</option>
-        <option value="completed" name="newStatus">completed</option>
-       </select> -->
-       <br><br>
-       <button type="submit" > add ticket </button>
- 
-   </form>
-   <form action="/return" method="post">
-    <button type="submit" name="returnBtn" value="user"> <-back to dashboard</button>
-  </form>
+  <section class="registerPage vh-100">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+          <div class="card shadow-2-strong"  style="background-color: #f9f6f3c0; border-radius: 1rem;">
+            <div class="card-body p-5 text-center">
+            <h1> New Ticket </h1><br>
+            <form action="/createTicket" method="post">
+              <div class="mb-4" style="text-align: center;">
+                <input type="text" placeholder="title" name="newTitle"  autocomplete="off"  style="width: 320px;" required >
+              </div>
+              <div class="mb-4" style="text-align: center;">
+                <textarea  placeholder="description" name="newDes" rows="5" cols="35" autocomplete="off" required></textarea>
+              </div>
+              <div class="mb-4" style="text-align: center;">
+                <select name="newUrg" required style="width: 320px;">
+                  <optgroup label="Select urgency"> </optgroup>
+                  <option value="1high" name="newUrg">high</option>
+                  <option value="2medium" name="newUrg">medium</option>
+                  <option value="3low" name="newUrg">low</option>
+                </select><br>
+                </div>
+                <div class="mb-4" style="text-align: center;">
+                <input type="text " placeholder="created by" name="newCreatedBy" autocomplete="off" style="width: 320px;" required>
+                </div>
+                <div class="mb-4" style="text-align: center;">
+                <input type="text " placeholder="contact" name="newContact" autocomplete="off" style="width: 320px;" required>
+                </div>
+        <br>
+        <button type="submit"class="btn btn-success btn-lg btn-block" > add ticket </button><br>
+  
+          </form>
+          <form action="/return" method="post">
+            <button type="submit" class="btn btn-success btn-lg btn-block" name="returnBtn" value="user"> <- back to dashboard</button>
+          </form>
+          </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </body>
 </html>
