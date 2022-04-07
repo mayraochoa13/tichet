@@ -28,8 +28,21 @@
 }
 
 .loginPage, .registerPage {
-    font-family: 'Lato', cursive;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: larger;
+}
+
+.logOut{
+    text-align: right;
+    padding-top: 15px;
+    padding-right: 25px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background-attachment: fixed;
+}
+.logOut a{
+    color: white;
+    font-size:18px;
+    background-attachment: fixed;
 }
 
 section h3 {

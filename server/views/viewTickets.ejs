@@ -17,34 +17,40 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.11.0/mdb.min.css" rel="stylesheet">  
 
 </head>
-<body>
-  <section class="viewTickets vh-100">
+<body class="viewTickets vh-100">
+
+  <section>
+    <header class="logOut">
+      <form action="/logout" method="get">
+        <a href="/logout"><strong>Log Out</strong></a>    
+      </header> 
     <div class="container py-5 h-100">
       <div class="row d-flex justify-content-center align-items-center h-100">
-        <div class="col-18 col-md-5 col-lg-10 col-xl-10">
-          <div class="card shadow-2-strong"  style="background-color: #f9f6f3c0; border-radius: 1rem;">
-            <div class="card-body p-10 text-center">
+        <div class="col-8 col-md-5 col-lg-8 col-xl-7">
+          <div class="card shadow-2-strong"  style="background-color: #f9f6f3c0; border-radius: 1rem;"> 
+            <div class="card-body p-2 text-center">
             <h1>View Tickets</h1>
-            <div class="mb-4" style="text-align: center;">
-            <table>
-              <tr style="background-color:#DEDDDC;">
+            <div class="mb-6" style="text-align: center;">
+            <table  >
+              <tr style="background-color:#DEDDDC; " >
                 <form action="/filterTickets" method="post">
                       <th>Title</th>
                       <!-- <th>Description</th> -->
                         <th>
-                            <button name="option" value="urgency$<%=user%>"> Urgency</button>
+                            <button name="option"  class="btn btn-secondary btn-sm" value="urgency$<%=user%>" style="background-color: transparent; color:black"> Urgency</button>
                         </th>
                       
                       <th>Created by</th>
                       <th>Contact</th>
 
                       <th>
-                        <button name="option" value="status$<%=user%>"> Status</button>
+                        <button name="option" class = "btn btn-secondary btn-sm" value="status$<%=user%>" style="background-color: transparent; color:black"> Status</button>
                       </th>
 
                       <th>
-                        <button name="option" value="date$<%=user%>"> Date</button>
+                        <button name="option" class="btn btn-secondary btn-sm" value="date$<%=user%>" style="background-color: transparent;color:black "> Date</button>
                       </th>
+                      <th></th>
                 </form> 
               </tr>
     <% tickets.forEach(function(ticket) {  %>
@@ -59,7 +65,7 @@
       <% if(role === 'user'){ %>
             <td>
               <form action="/editTicket" method="post">
-                <button type="submit" name="IDandROLE" value="<%= ticket._id %>$<%= role %>"> edit </button>
+                <button type="submit" class="btn btn-secondary btn-sm" name="IDandROLE" value="<%= ticket._id %>$<%= role %>" style="background-color: transparent; color:black"> edit </button>
               </form>
             </td>
       
@@ -79,20 +85,16 @@
     </table><br>
   <% if(role === 'user'){ %>
   <form action="/createTicket" method="get">
-    <button class="btn btn-success btn-lg btn-block" name="returnBtn" type="submit">Create a ticket</button>    
+    <button class="btn btn-success " name="returnBtn" type="submit" style="background-color:#9370db;">Create a ticket</button>    
   </form>  
   <% } %>  
 
   <% if(role === 'owner'){ %>
     <form action="/ManageUsers" method="get">
-      <button class="btn btn-success btn-lg btn-block" name="returnBtn" type="submit">Manage Users </button>    
+      <button class="btn btn-success " name="returnBtn" type="submit">Manage Users </button>    
     </form>  
     <% } %> 
 
-    <br>
-    <form action="/logout" method="get">
-      <button class="btn btn-success btn-lg btn-block" name="returnBtn" type="submit">log out </button>    
-    </form>  
           </div>
           </div>
           </div>
