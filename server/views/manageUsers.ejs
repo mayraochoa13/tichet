@@ -1,31 +1,90 @@
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<%- include('../partials/header'); %>
     <title>Manage Users</title>
-
-    <style>
-        *{
-            text-align: center;
-        }
-        td, th {
-          border: 1px solid #dddddd;
-          text-align: center;
-          padding: 8px;
-        }
-    
-        </style>
 </head>
-<body>
-    <h1> Manage Users  </h1>
+<body class="blueBackground"> 
+
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-3"></div>
+            <div class="col-lg-6">
+              <div class="articles card">
+
+                <div class="card-header text-center">
+                        <h1 class="m-4"> Manage Users </h1>
+
+                        <form  action="/filterUsers" method="post" class="mb-4">
+                            <select class="selectpicker" data-style="btn-info" name="filter" >
+                              
+                                <option value="" disabled selected hidden> Filter By </option>
+                                <optgroup label="Role"></optgroup>
+                                <option name="user" value="user">user</option>
+                                <option name="admin" value="admin">admin</option>
+                                <option name="owner" value="owner">owner</option>
+                                <optgroup label="Other"></optgroup>
+                                <option name="alphabetical" value="first">first name</option>
+                                <option name="alphabetical" value="last">last name</option>
+                                <option name="alphabetical" value="all">none</option>
+                              
+                            </select>
+                            <input type="submit" value="Apply"/> 
+                        </form>
+                </div>
+
+                <% ListOfUsers.forEach( function(user) {  %>
+                    <div class="row user-card">
+                        <div class="item d-flex user-lists">
+                            <div class="col-sm-8">
+                                <h4 class="text-primary"> <%= user.FirstName %> <%= user.LastName %> </h4>
+                                <small class="text-muted"> Email: <%= user.username %> </small>
+                            </div>
+                            <div class="col-sm-4 text-align-center">
+
+                                <form  action="/ManageUsers" method="post">
+                                    <select class="selectpicker" data-style="btn-info" name="selectROLE" class="form-select form-select-lg">
+                                            
+                                            <option value="" disabled selected hidden><%= user.role %></option>
+                                            <optgroup label="Switch Role"></optgroup>
+                                            <option name="user" value="<%= user._id %>$user">user</option>
+                                            <option name="admin" value="<%= user._id %>$admin">admin</option>
+                                            <option name="owner" value="<%= user._id %>$owner">owner</option>
+                                            <optgroup label="DELETE"></optgroup>
+                                            <option name="DELETE" value="<%= user._id %>$DELETE">DELETE</option>
+                                        
+                                    </select>
+                                    <input type="submit" /> 
+                                    <!-- <button type="submit" name="DELETE" value="<%= user._id %>$DELETE" class="btn btn-danger" > Delete Account</button> -->
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+                    
+                <form action="/return" method="post" class="text-center">
+                    <button type="submit" name="returnBtn" value="owner" class="btn m-5" style="background-color:#9370db; color:white;"> <- back to dashboard</button>
+                </form>
+
+                </div>
+            </div>
+            <div class="col-lg-3"></div>
+        </div>
+    </div>
+
+
+
+
+
+
+    
+
+
+    <!-- ******* THIS IS DEFAULT ******* -->
+    <!-- <h1> Manage Users  </h1> -->
 
     <!-- filter dropdown  -->
-    <form  action="/filterUsers" method="post">
+    <!-- <form  action="/filterUsers" method="post">
         <select class="selectpicker" data-style="btn-info" name="filter" >
-               
+                
                 <option value="" disabled selected hidden></option>
                 <optgroup label="Filter By"></optgroup>
                 <optgroup label="Role"></optgroup>
@@ -52,45 +111,34 @@
 
         </tr>
         <% ListOfUsers.forEach( function(user) {  %>
-        <tr>
-            <td><%= user.FirstName %></td>
-            <td><%= user.LastName %></td>
-            <td><%= user.username %></td>
-            
-           
-            <td> 
-                <form  action="/ManageUsers" method="post">
-                    <select class="selectpicker" data-style="btn-info" name="selectROLE" >
-                           
-                            <!-- <option value="" disabled selected hidden><%= user.role %></option> -->
-                           <option value="" disabled selected hidden><%= user.role %></option>
-                            <optgroup label="Switch Role"></optgroup>
-                            <option name="user" value="<%= user._id %>$user">user</option>
-                            <option name="admin" value="<%= user._id %>$admin">admin</option>
-                            <option name="owner" value="<%= user._id %>$owner">owner</option>
-                            <optgroup label="DELETE"></optgroup>
-                            <option name="DELETE" value="<%= user._id %>$DELETE">DELETE</option>
-                        
-                    </select>
-                    <input type="submit"/> 
-                </form>
-            </form>
-            </td>
-        </tr>
-  
-          
-       <% }) %>
-
-
-       </table>
-   
-<br>
-<br>
-<br>
-
-
+            <tr>
+                <td><%= user.FirstName %></td>
+                <td><%= user.LastName %></td>
+                <td><%= user.username %></td>
+                
+                
+                <td> 
+                    <form  action="/ManageUsers" method="post">
+                        <select class="selectpicker" data-style="btn-info" name="selectROLE" >
+                                <option value="" disabled selected hidden><%= user.role %></option>
+                                <optgroup label="Switch Role"></optgroup>
+                                <option name="user" value="<%= user._id %>$user">user</option>
+                                <option name="admin" value="<%= user._id %>$admin">admin</option>
+                                <option name="owner" value="<%= user._id %>$owner">owner</option>
+                                <optgroup label="DELETE"></optgroup>
+                                <option name="DELETE" value="<%= user._id %>$DELETE">DELETE</option>
+                            
+                        </select>
+                        <input type="submit"/> 
+                    </form>
+                </td>
+            </tr>
+        <% }) %>
+    </table>
+    <br><br><br>
     <form action="/return" method="post">
     <button type="submit" name="returnBtn" value="owner"> <-back to dashboard</button>
-    </form>
+    </form> -->
+
 </body>
 </html>
