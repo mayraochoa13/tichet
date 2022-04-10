@@ -1,49 +1,101 @@
 <%- include('../partials/header'); %>
    <title>Create Ticket</title>
 </head>
-<body class="greenBackground">
+<body class="blueBackground">
   <section class="registerPage vh-100">
     <div class="container py-5 h-100">
       <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col-12 col-md-8 col-lg-6 col-xl-6">
-          <div class="card shadow-2-strong"  style="background-color: #f9f6f3c0; border-radius: 1rem;">
+          <div class="card shadow-2-strong mb-5"  style="background-color: #f9f6f3c0; border-radius: 1rem;">
             <div class="card-body p-5 text-center">
-            <h1> New Ticket </h1><br>
-            <form action="/createTicket" method="post">
-              <div class="mb-4" style="text-align: center;">
-                <input type="text" placeholder="title" name="newTitle"  autocomplete="off"  style="width: 320px;" required >
-              </div>
-              <div class="mb-4" style="text-align: center;">
-                <textarea  placeholder="description" name="newDes" rows="5" cols="35" autocomplete="off" required></textarea>
-              </div>
-              <div class="mb-4" style="text-align: center;">
-                <select name="newUrg" required style="width: 320px;">
-                  <optgroup label="Select urgency"> </optgroup>
-                  <option value="1high" name="newUrg">high</option>
-                  <option value="2medium" name="newUrg">medium</option>
-                  <option value="3low" name="newUrg">low</option>
-                </select><br>
-                </div>
-                <div class="mb-4" style="text-align: center;">
-                <input type="text " placeholder="created by" name="newCreatedBy" autocomplete="off" style="width: 320px;" required>
-                </div>
-                <div class="mb-4" style="text-align: center;">
-                <input type="text " placeholder="contact" name="newContact" autocomplete="off" style="width: 320px;" required>
-                </div>
-        <br>
-        <button type="submit" class="btn btn-success " style="background-color:#9370db;" > add ticket </button><br><br>
-  
-          </form>
-          <form action="/return" method="post">
-            <button type="submit" class="btn btn-success " name="returnBtn" style="background-color:#9370db;" name="returnBtn" value="user"> cancel </button>
-            
-          </form>
-          </div>
+
+            <h3 class="mb-5">New Ticket</h3>
+
+            <div class="mt-4 d-flex justify-content-center pb-4">
+              <p class="mb-0 me-2">What's the technical issue?</p>
             </div>
+
+            <form action="/createTicket" method="post">
+              <div class="mb-4 row">
+                <span class="col-sm-1"></span>
+                <div class="col-sm-10">
+                  <input type="text" name="newTitle" placeholder="Subject (e.g. Computer keeps shutting off)" class="form-control form-control-lg" autocomplete="off" required>
+                </div>
+                <span class="col-sm-1"></span>
+              </div>
+              
+              <div class="mb-4 row">
+                <span class="col-sm-1"></span>
+                <div class="col-sm-10">
+                  <textarea name="newDes" placeholder="Description..." rows="3" class="form-control form-control-lg" autocomplete="off" required></textarea>
+                </div>
+                <span class="col-sm-1"></span>
+              </div>
+              
+              <div class="mb-4 row">
+                <span class="col-sm-1"></span>
+                <div class="col-sm-10">
+                  <select name="newUrg" class="form-select form-select-lg" required>
+                    <option selected > Select Urgency</option>
+                    <option value="1high" name="newUrg">High</option>
+                    <option value="2medium" name="newUrg">Medium</option>
+                    <option value="3low" name="newUrg">Low</option>
+                  </select>  
+                </div>
+                <span class="col-sm-1"></span>
+              </div>
+              
+              <div class="mb-4 row">
+                <span class="col-sm-1"></span>
+                <div class="col-sm-10">
+                  <input type="text" name="newCreatedBy" placeholder="Created By (e.g. John Doe)" class="form-control form-control-lg" autocomplete="off" required>
+                </div>
+                <span class="col-sm-1"></span>
+              </div>
+              
+              <div class="mb-6 row">
+                <span class="col-sm-1"></span>
+                <div class="col-sm-10">
+                  <input type="text " name="newContact" placeholder="Contact Information (e.g. doe@gmail.com)" class="form-control form-control-lg" autocomplete="off" required>
+                </div>
+                <span class="col-sm-1"></span>
+              </div>
+
+              <button type="submit" class="btn btn-primary mb-4"> add ticket </button>
+            </form>
+
+            <form action="/return" method="post">
+              <button type="submit" name="returnBtn" value="user" class="btn" style="background-color:#9370db; color:white;" > cancel </button>
+            </form>
+
           </div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</div>
+</section>
 </body>
 </html>
+<!-- <div class="mb-4" style="text-align: center;">
+  <textarea  placeholder="description" name="newDes" rows="5" cols="35" autocomplete="off" required></textarea>
+</div> -->
+
+<!-- <div class="mb-4" style="text-align: center;">
+  <select name="newUrg" required style="width: 320px;">
+    <optgroup label="Select urgency"> </optgroup>
+    <option value="1high" name="newUrg">high</option>
+    <option value="2medium" name="newUrg">medium</option>
+    <option value="3low" name="newUrg">low</option>
+  </select><br>  
+</div> -->
+
+
+<!-- <div class="mb-4" style="text-align: center;">
+  <input type="text " placeholder="created by" name="newCreatedBy" autocomplete="off" style="width: 320px;" required>
+</div> -->
+
+<!-- <div class="mb-4" style="text-align: center;">
+  <input type="text " placeholder="contact" name="newContact" autocomplete="off" style="width: 320px;" required>
+</div>
+<br> -->

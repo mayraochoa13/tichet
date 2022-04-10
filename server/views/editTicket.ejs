@@ -1,7 +1,7 @@
 <%- include('../partials/header'); %>
    <title>Edit Tickets</title>
 </head>
-<body class="greenBackground">
+<body class="blueBackground">
 
   <section>
     <header class="logOut">
@@ -119,13 +119,14 @@
                 <button type="submit"  class="btn btn-secondary btn-sm"style="background-color: transparent; color:black"> update </button>
             </form>
             <%  }    %>
-            <form action="/updateDelete" method="post">
-              <button type="submit" class="btn btn-success "  name="deleteBTN" value="<%= ticket._id %>" style="background-color:#9370db;">DELETE</button>
+
+            <form action="/return" method="post">
+              <button type="submit" class="btn btn-success " name="returnBtn" value="<%=role%>" style="background-color:#9370db;"> <-- Go Back</button>
             </form>
             <br>
-            <form action="/return" method="post">
-              <button type="submit" class="btn btn-success " name="returnBtn" value="<%=role%>" style="background-color:#9370db;"> Cancel</button>
-          </form>
+            <form action="/updateDelete" method="post">
+              <button type="submit" class="btn btn-danger "  name="deleteBTN" value="<%= ticket._id %>">DELETE</button>
+            </form>
           <% }) %>
 
            

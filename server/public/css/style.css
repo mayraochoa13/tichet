@@ -1,26 +1,29 @@
-/* was login */
+/* Background Shades */
 .blueBackground {
     background-color: #4673E8;
     background: url("../img/blue.svg") no-repeat center center fixed;
     background-size: cover;
 }
-/* was register */
 .greenBackground{
     background-color: #419F73;
     background: url("../img/green.svg") no-repeat center center fixed; 
     background-size: cover;
 
 }
-.greenBackground td,  .greenBackground th {
-  border: 1px solid #dddddd;
-  text-align: center;
-  padding: 8px;
-}
 .blueGreenMix {
     background-color: #79C8A3;
     background: url("../img/blueGreen.svg") no-repeat center center fixed; 
     background-size: cover;
 }
+
+
+
+.greenBackground td,  .greenBackground th {
+    border: 1px solid #dddddd;
+    text-align: center;
+    padding: 8px;
+}
+
 .logOut{
     text-align: right;
     padding-top: 15px;
@@ -40,3 +43,62 @@
 section h3 {
     font-weight: bold;
 }
+
+
+
+/* This is for Manage Users ejs */
+.manageUser td, .manageUser th {
+  border: 1px solid #dddddd;
+  text-align: center;
+  padding: 8px;
+}
+
+
+
+/* body{
+    margin-top:20px;
+    background:#FAFAFA;    
+} */
+
+
+
+
+.user-lists{
+    /* top right bottom left */
+  padding: 0 20px;
+  /* border-top: 1px solid #3fadad; */
+  border-bottom: 1px solid #4673E8;
+  margin-bottom: 20px;
+}
+
+.user-card {
+    flex: 1 1 auto;
+    padding: 1.5rem;
+    padding-bottom: 0;
+}
+
+
+
+
+.articles .item {
+    padding: 15px 20px;
+    padding-top: 0;
+}
+
+.articles .item h4 {
+    color: #555;
+    font-weight: 400;
+    margin-bottom: 0
+}
+
+.articles .item small {
+    color: #aaa;
+    font-size: 0.75em
+}
+
+.card-close {
+    position: absolute;
+    top: 15px;
+    right: 15px
+}
+
