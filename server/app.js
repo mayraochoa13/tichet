@@ -425,11 +425,6 @@ app.post('/createTicket',loggedIn, function(req, response){
 
     const newTicket = { title: ticketTitle ,  description : ticketDes, urgency: ticketUrgency, createdBy: ticketCreatedBy,userID: UserID, contact: ticketContact, status:ticketStatus}; 
 
-    Ticket.find({userID: UserID }, function(err, foundTicket){
-        console.log(foundTicket[0].createdAt); 
-        // const tickeCreateDate = foundTicket[0].createdAt;
-    }); 
-
         Ticket.insertMany(newTicket); 
         // insert ticket now redirect to dashboard 
 
