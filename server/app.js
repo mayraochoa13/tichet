@@ -63,8 +63,9 @@ app.use(passport.session());
 const Ticket = require('./models/ticket');
 const User = require('./models/User'); 
 
-mongoose.connect("mongodb+srv://adminSaul:test123@cluster0.pyekv.mongodb.net/SampleDB?retryWrites=true&w=majority" , {useNewUrlParser: true , useUnifiedTopology: true}); 
+//mongoose.connect("mongodb+srv://adminSaul:test123@cluster0.pyekv.mongodb.net/SampleDB?retryWrites=true&w=majority" , {useNewUrlParser: true , useUnifiedTopology: true}); 
 
+mongoose.connect("mongodb+srv://techsquad:dnest-Tech22@tichetcluster.gcojx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority" , {useNewUrlParser: true , useUnifiedTopology: true});
 // passport local configurations 
 passport.use(User.createStrategy()); 
 
