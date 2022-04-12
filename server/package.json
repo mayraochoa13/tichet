@@ -14,7 +14,7 @@
   "author": "",
   "license": "ISC",
   "engines":{
-    "node":"16.14.0"
+    "node":"16.13.2"
   },
   "bugs": {
     "url": "https://github.com/mayraochoa13/tichet/issues"
