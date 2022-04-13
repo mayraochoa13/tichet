@@ -6,7 +6,6 @@
   "scripts": {
     "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
-   
   },
   "repository": {
     "type": "git",
@@ -14,20 +13,20 @@
   },
   "author": "",
   "license": "ISC",
-  "engines":{
-    "node":"16.13.2"
+  "engines": {
+    "node": "16.13.2"
   },
   "bugs": {
     "url": "https://github.com/mayraochoa13/tichet/issues"
   },
   "homepage": "https://github.com/mayraochoa13/tichet#readme",
   "dependencies": {
+    "body-parser": "^1.19.2",
+    "ejs": "^3.0.2",
     "express": "^4.17.3",
+    "express-session": "^1.17.2",
     "mongoose": "^6.2.4",
     "nodemon": "^2.0.15",
-    "body-parser": "^1.19.2",
-    "ejs": "^3.1.6",
-    "express-session": "^1.17.2",
     "passport": "^0.5.2",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^6.1.0"
