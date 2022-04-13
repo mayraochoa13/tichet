@@ -27,9 +27,9 @@ const passportLocalMongoose = require('passport-local-mongoose');
 // require body parser 
 const bodyParser = require("body-parser"); 
 
-// use ejs 
+// use ejs  //app.set('views', path.join(__dirname, 'views'));
 app.set('view engine' , 'ejs');
-
+app.set('views', path.join(__dirname, 'views'));
 
 // use body parser 
 app.use(bodyParser.json()); 
