@@ -63,6 +63,7 @@ app.use(passport.session());
 const Ticket = require('./models/ticket');
 const User = require('./models/User'); 
 
+
 //mongoose.connect("mongodb+srv://adminSaul:test123@cluster0.pyekv.mongodb.net/SampleDB?retryWrites=true&w=majority" , {useNewUrlParser: true , useUnifiedTopology: true}); 
 
 mongoose.connect("mongodb+srv://techsquad:dnest-Tech22@tichetcluster.gcojx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority" , {useNewUrlParser: true , useUnifiedTopology: true});
@@ -317,16 +318,10 @@ app.get('/logout', function( req, res){
 //loggedIn,  uOwner, 
 app.get('/ManageUsers',loggedIn,  uOwner, function( req, res){
     const query = req.query.filter; 
+
     if(  query === undefined || query === 'all'){
-
         
-        User.find({}, function( err, foundUsers){
-            //console.log(foundUsers); 
-            res.render('manageUsers',{ ListOfUsers: foundUsers}); 
-
-
-    }); 
-            //res.redirect('/ManageUsers');
+        UserController.getAllUsers(req , res, 'manageUsers');
     }
     else if(query === 'first'){
         // attempting to order users without case sensitivity, sort orders A first over a
@@ -700,4 +695,6 @@ app.listen(port, function(){
     console.log("Server has started successfully");
    
 });
+
+const UserController = require("./controllers/userController");
 
