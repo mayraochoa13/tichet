@@ -7,6 +7,7 @@
 2. [Product Spec](#Product-Spec)
 3. [Wireframes](#Wireframes)
 4. [Schema](#Schema)
+5. [Join Us](#Join-Us)
 
 ## Overview
 ### Description
@@ -49,7 +50,8 @@
 #### Post
 if " cannot find x_dependency  " { npm i x_dependency }
 
-##Join Us 
+
+## Join Us 
 #### Get Started  
 1. [Clone](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) the Repository 
 2. In root directory, install packages
