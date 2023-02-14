@@ -19,4 +19,5 @@ const userModel = function() {
 
 module.exports = userModel();
 
+// test to see if i have access to github outside of 2n, using vs code
 const User = require("./User");
